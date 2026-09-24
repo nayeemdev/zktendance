@@ -68,4 +68,21 @@ class SetupTest extends TestCase
         $this->post('/login', ['email' => 'admin@example.com', 'password' => 'password'])->assertRedirect('/');
         $this->assertAuthenticatedAs($this->admin);
     }
+
+    public function test_timezone_is_applied_right_after_setup(): void
+    {
+        $original = date_default_timezone_get();
+
+        $this->post('/setup', [
+            'company_name' => 'Acme Ltd', 'country' => 'BD', 'currency' => 'BDT', 'currency_symbol' => '৳',
+            'timezone' => 'Asia/Dhaka', 'branch_name' => 'Head Office', 'office_start' => '09:00', 'office_end' => '18:00',
+            'admin_name' => 'Owner', 'admin_email' => 'owner@example.com', 'admin_password' => 'secret123', 'admin_password_confirmation' => 'secret123',
+        ]);
+
+        $this->assertSame('Asia/Dhaka', date_default_timezone_get());
+        $this->assertSame('Asia/Dhaka', config('app.timezone'));
+
+        date_default_timezone_set($original);
+        config(['app.timezone' => $original]);
+    }
 }
