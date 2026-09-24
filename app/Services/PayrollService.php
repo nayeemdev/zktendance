@@ -21,6 +21,7 @@ class PayrollService
         private AttendanceService $attendance,
         private SalaryService $salary,
         private TaxService $tax,
+        private NotificationService $notifications,
     ) {}
 
     public function create(string $month, ?int $branchId, User $user): PayrollRun
@@ -210,6 +211,16 @@ class PayrollService
 
             $run->update(['status' => PayrollRun::APPROVED, 'approved_by' => $user->id, 'approved_at' => now()]);
         });
+
+        foreach ($run->payslips()->with('employee.user')->get() as $payslip) {
+            $this->notifications->employee(
+                $payslip->employee,
+                'Payslip ready',
+                'Your payslip for '.$run->month->format('F Y').' is ready. Net pay: '.money($payslip->net_salary).'.',
+                route('portal.payslips.show', $payslip),
+                ! setting('email_payslips')
+            );
+        }
     }
 
     public function markPaid(PayrollRun $run): void

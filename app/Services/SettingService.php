@@ -29,6 +29,8 @@ class SettingService
         'minimum_tax' => 5000,
         'payslip_footer' => 'This is a system generated payslip.',
         'email_payslips' => false,
+        'email_notifications' => true,
+        'device_offline_minutes' => 30,
         'setup_completed' => false,
     ];
 

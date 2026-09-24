@@ -14,7 +14,10 @@ use Illuminate\Validation\ValidationException;
 
 class LeaveService
 {
-    public function __construct(private AttendanceService $attendance) {}
+    public function __construct(
+        private AttendanceService $attendance,
+        private NotificationService $notifications,
+    ) {}
 
     public function countDays(Employee $employee, Carbon $start, Carbon $end, bool $halfDay = false): float
     {
@@ -69,7 +72,7 @@ class LeaveService
 
         $this->ensureBalance($employee, $type, $start->year, $days);
 
-        return $employee->leaveRequests()->create([
+        $leave = $employee->leaveRequests()->create([
             'leave_type_id' => $type->id,
             'start_date' => $start,
             'end_date' => $end,
@@ -77,6 +80,14 @@ class LeaveService
             'days' => $days,
             'reason' => $data['reason'] ?? null,
         ]);
+
+        $this->notifications->staff(
+            'New leave request',
+            "{$employee->name} applied for {$days} day(s) of {$type->name} from {$start->format('d M Y')}.",
+            route('admin.leaves.index')
+        );
+
+        return $leave;
     }
 
     public function approve(LeaveRequest $request, User $reviewer, ?string $note = null): void
@@ -95,11 +106,13 @@ class LeaveService
         });
 
         $this->attendance->processRange($request->start_date, $request->end_date, [$request->employee_id]);
+        $this->notifyEmployee($request, 'approved');
     }
 
     public function reject(LeaveRequest $request, User $reviewer, ?string $note = null): void
     {
         $this->close($request, 'rejected', $reviewer, $note);
+        $this->notifyEmployee($request, 'rejected');
     }
 
     public function cancel(LeaveRequest $request, ?User $user = null): void
@@ -143,6 +156,18 @@ class LeaveService
         if ($wasApproved) {
             $this->attendance->processRange($request->start_date, $request->end_date, [$request->employee_id]);
         }
+    }
+
+    private function notifyEmployee(LeaveRequest $request, string $status): void
+    {
+        $note = $request->review_note ? " Note: {$request->review_note}" : '';
+
+        $this->notifications->employee(
+            $request->employee,
+            "Leave {$status}",
+            "Your {$request->leaveType->name} from {$request->start_date->format('d M Y')} to {$request->end_date->format('d M Y')} was {$status}.{$note}",
+            route('portal.leaves.index')
+        );
     }
 
     private function ensureBalance(Employee $employee, LeaveType $type, int $year, float $days): void

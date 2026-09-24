@@ -38,6 +38,30 @@
                 <i class="bi bi-list"></i>
             </button>
             <h1 class="h5 mb-0">@yield('title', 'Dashboard')</h1>
+            <div class="d-flex align-items-center gap-2">
+            @php($unread = $user->unreadNotifications()->limit(8)->get())
+            <div class="dropdown">
+                <button class="btn btn-light position-relative" data-bs-toggle="dropdown" title="Notifications">
+                    <i class="bi bi-bell"></i>
+                    @if ($count = $user->unreadNotifications()->count())
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-danger">{{ $count }}</span>
+                    @endif
+                </button>
+                <div class="dropdown-menu dropdown-menu-end p-0" style="width: 320px">
+                    <div class="list-group list-group-flush">
+                        @forelse ($unread as $notification)
+                            <a href="{{ route('notifications.open', $notification->id) }}" class="list-group-item list-group-item-action">
+                                <div class="fw-semibold small">{{ $notification->data['title'] }}</div>
+                                <div class="small text-muted">{{ \Illuminate\Support\Str::limit($notification->data['message'], 90) }}</div>
+                                <div class="small text-muted">{{ $notification->created_at->diffForHumans() }}</div>
+                            </a>
+                        @empty
+                            <div class="list-group-item small text-muted">No new notifications.</div>
+                        @endforelse
+                        <a href="{{ route('notifications.index') }}" class="list-group-item list-group-item-action text-center small">View all</a>
+                    </div>
+                </div>
+            </div>
             <div class="dropdown">
                 <button class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown">
                     <i class="bi bi-person-circle"></i> {{ $user->name }}
@@ -52,6 +76,7 @@
                         </form>
                     </li>
                 </ul>
+            </div>
             </div>
         </header>
 
