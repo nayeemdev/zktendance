@@ -16,6 +16,7 @@ class OvertimeRule extends Model
     {
         return [
             'is_enabled' => 'boolean',
+            'requires_approval' => 'boolean',
             'workday_multiplier' => 'float',
             'offday_multiplier' => 'float',
         ];

@@ -35,6 +35,8 @@ Route::middleware('auth')->group(function () {
         Route::post('leaves/{leave}/approve', [Admin\LeaveRequestController::class, 'approve'])->name('leaves.approve');
         Route::post('leaves/{leave}/reject', [Admin\LeaveRequestController::class, 'reject'])->name('leaves.reject');
         Route::post('leaves/{leave}/recommend', [Admin\LeaveRequestController::class, 'recommend'])->name('leaves.recommend');
+        Route::get('overtime', [Admin\OvertimeApprovalController::class, 'index'])->name('overtime.index');
+        Route::post('overtime/review', [Admin\OvertimeApprovalController::class, 'review'])->name('overtime.review');
 
         Route::middleware('role:admin,hr')->group(function () {
             Route::resource('employees', Admin\EmployeeController::class);

@@ -56,7 +56,7 @@
                     <td>{{ minutes_to_hours($row->worked_minutes) }}</td>
                     <td>{{ $row->late_minutes ? $row->late_minutes.'m' : '-' }}</td>
                     <td>{{ $row->early_leave_minutes ? $row->early_leave_minutes.'m' : '-' }}</td>
-                    <td>{{ $row->overtime_minutes ? minutes_to_hours($row->overtime_minutes) : '-' }}</td>
+                    <td>{{ $row->overtime_minutes ? minutes_to_hours($row->overtime_minutes) : '-' }}@if($row->overtime_status)<div><x-badge :status="$row->overtime_status" /></div>@endif</td>
                     <td><x-status :attendance="$row" /> @if($row->note)<i class="bi bi-info-circle text-muted" title="{{ $row->note }}"></i>@endif</td>
                     <td class="text-end text-nowrap">
                         <a href="{{ route('admin.attendance.edit', $row) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a>

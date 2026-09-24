@@ -16,7 +16,7 @@ Office attendance, leave and payroll management for companies using ZKTeco biome
 - **Manual attendance and correction requests** with a reason on every change.
 - **Leave management**: leave types, yearly balances, carry forward, half day, overlap and balance checks, approval flow. Approved leave updates attendance automatically.
 - **Salary structures**: components (Basic, House Rent, Medical, Conveyance, PF and so on) as a % of gross, % of basic or a fixed amount. Salary history with increments.
-- **Overtime rules**: minimum minutes, rounding, daily cap, rate base and multipliers. The default follows the Bangladesh Labour Act (Basic / 208 x 2).
+- **Overtime rules**: minimum minutes, rounding, daily cap, rate base and multipliers. The default follows the Bangladesh Labour Act (Basic / 208 x 2). A rule can require approval, then only overtime approved by HR or the branch manager is paid.
 - **Payroll** from attendance: absent and unpaid leave deduction, late deduction (for example 3 lates = 1 day), overtime, bonuses and deductions, loan installments, income tax (TDS) with editable Bangladesh tax slabs, pro rata for new joiners and leavers.
 - **Payslips** as PDF, emailed to employees on approval, CSV export for the bank.
 - **Reports**: daily attendance, monthly summary, monthly attendance sheet, late and early leave, leave balance, all with CSV export.

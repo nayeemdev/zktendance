@@ -8,6 +8,7 @@
             ['admin.attendance.index', 'calendar-check', 'Daily Attendance', 'admin.attendance.*'],
             ['admin.punches.index', 'fingerprint', 'Device Punches', 'admin.punches.*'],
             ['admin.corrections.index', 'pencil-square', 'Corrections', 'admin.corrections.*'],
+            ['admin.overtime.index', 'hourglass-top', 'Overtime Approvals', 'admin.overtime.*'],
             ['admin.shifts.index', 'clock', 'Shifts', 'admin.shifts.*'],
             ['admin.roster.index', 'calendar-week', 'Shift Roster', 'admin.roster.*'],
             ['admin.holidays.index', 'calendar-event', 'Holidays', 'admin.holidays.*'],
@@ -40,6 +41,7 @@
                 ['admin.attendance.index', 'calendar-check', 'Daily Attendance', 'admin.attendance.*'],
                 ['admin.leaves.index', 'calendar-x', 'Leave Requests', 'admin.leaves.*'],
                 ['admin.corrections.index', 'pencil-square', 'Corrections', 'admin.corrections.*'],
+                ['admin.overtime.index', 'hourglass-top', 'Overtime Approvals', 'admin.overtime.*'],
             ],
         ];
     }
