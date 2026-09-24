@@ -9,6 +9,7 @@
             ['admin.punches.index', 'fingerprint', 'Device Punches', 'admin.punches.*'],
             ['admin.corrections.index', 'pencil-square', 'Corrections', 'admin.corrections.*'],
             ['admin.shifts.index', 'clock', 'Shifts', 'admin.shifts.*'],
+            ['admin.roster.index', 'calendar-week', 'Shift Roster', 'admin.roster.*'],
             ['admin.holidays.index', 'calendar-event', 'Holidays', 'admin.holidays.*'],
         ],
         'Leave' => [

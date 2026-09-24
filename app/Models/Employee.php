@@ -63,6 +63,18 @@ class Employee extends Model
         return $this->belongsTo(Shift::class);
     }
 
+    public function shiftAssignments(): HasMany
+    {
+        return $this->hasMany(ShiftAssignment::class);
+    }
+
+    public function shiftOn(\DateTimeInterface $date): ?Shift
+    {
+        $assignment = $this->shiftAssignments()->with('shift')->covering($date)->latest('id')->first();
+
+        return $assignment?->shift ?? $this->shift;
+    }
+
     public function attendances(): HasMany
     {
         return $this->hasMany(Attendance::class);
