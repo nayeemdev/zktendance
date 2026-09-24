@@ -4,7 +4,7 @@
 
 @section('content')
 <x-page-header>
-    <x-post-button :action="route('notifications.read-all')" label="Mark all as read" icon="check2-all" />
+    <x-post-button :action="route('notifications.read-all')" label="Mark all as read" icon="tick-double-02" />
 </x-page-header>
 
 <div class="card col-lg-9">

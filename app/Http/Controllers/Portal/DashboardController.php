@@ -20,6 +20,11 @@ class DashboardController extends Controller
             'today' => $employee->attendances()->whereDate('date', today())->first(),
             'punches' => AttendanceLog::where('employee_id', $employee->id)->whereDate('punched_at', today())->orderBy('punched_at')->get(),
             'summary' => $payroll->attendanceSummary($employee, today()->startOfMonth(), today()),
+            'month' => $employee->attendances()
+                ->whereBetween('date', [today()->startOfMonth()->toDateString(), today()->endOfMonth()->toDateString()])
+                ->get()
+                ->keyBy(fn ($row) => $row->date->day),
+            'shift' => $employee->shiftOn(today()) ?? $employee->shift,
             'balances' => $leaves->eligibleTypes($employee)->map(fn ($type) => $leaves->balance($employee, $type, now()->year)->setRelation('leaveType', $type)),
             'notices' => Notice::where(fn ($q) => $q->whereNull('branch_id')->orWhere('branch_id', $employee->branch_id))
                 ->whereDate('published_on', '<=', today())

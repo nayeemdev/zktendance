@@ -4,16 +4,16 @@
 
 @section('content')
 <x-page-header :title="$run->title()">
-    <a href="{{ route('admin.payroll.export', [$run, 'format' => 'xlsx']) }}" class="btn btn-outline-success"><i class="bi bi-file-earmark-excel"></i> Excel</a>
-    <a href="{{ route('admin.payroll.export', $run) }}" class="btn btn-outline-secondary"><i class="bi bi-filetype-csv"></i> CSV</a>
+    <a href="{{ route('admin.payroll.export', [$run, 'format' => 'xlsx']) }}" class="btn btn-outline-success"><i class="hgi-stroke hgi-xls-02"></i> Excel</a>
+    <a href="{{ route('admin.payroll.export', $run) }}" class="btn btn-outline-secondary"><i class="hgi-stroke hgi-csv-02"></i> CSV</a>
     @if ($run->isDraft())
-        <x-post-button :action="route('admin.payroll.regenerate', $run)" label="Regenerate" icon="arrow-repeat" style="outline-primary" confirm="Recalculate all payslips from the latest data? Manual line edits will be replaced." />
-        <x-post-button :action="route('admin.payroll.approve', $run)" label="Approve" icon="check2-circle" style="success" confirm="Approve this payroll? Loan installments will be recorded and payslips will be visible to employees." />
+        <x-post-button :action="route('admin.payroll.regenerate', $run)" label="Regenerate" icon="refresh" style="outline-primary" confirm="Recalculate all payslips from the latest data? Manual line edits will be replaced." />
+        <x-post-button :action="route('admin.payroll.approve', $run)" label="Approve" icon="checkmark-circle-02" style="success" confirm="Approve this payroll? Loan installments will be recorded and payslips will be visible to employees." />
         <x-delete-button :action="route('admin.payroll.destroy', $run)" message="Delete this draft payroll?" label="Delete" />
     @else
-        <x-post-button :action="route('admin.payroll.email', $run)" label="Email Payslips" icon="envelope" confirm="Email payslips to all employees in this run?" />
+        <x-post-button :action="route('admin.payroll.email', $run)" label="Email Payslips" icon="mail-01" confirm="Email payslips to all employees in this run?" />
         @if ($run->status === 'approved')
-            <x-post-button :action="route('admin.payroll.pay', $run)" label="Mark as Paid" icon="cash" style="success" />
+            <x-post-button :action="route('admin.payroll.pay', $run)" label="Mark as Paid" icon="money-01" style="success" />
         @endif
     @endif
 </x-page-header>
@@ -46,8 +46,8 @@
                     <td class="text-end">{{ money($payslip->total_deductions, false) }}</td>
                     <td class="text-end fw-semibold">{{ money($payslip->net_salary, false) }}</td>
                     <td class="text-end text-nowrap">
-                        <a href="{{ route('admin.payslips.show', $payslip) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-eye"></i></a>
-                        <a href="{{ route('admin.payslips.pdf', $payslip) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-file-pdf"></i></a>
+                        <a href="{{ route('admin.payslips.show', $payslip) }}" class="btn btn-sm btn-outline-secondary"><i class="hgi-stroke hgi-view"></i></a>
+                        <a href="{{ route('admin.payslips.pdf', $payslip) }}" class="btn btn-sm btn-outline-secondary"><i class="hgi-stroke hgi-pdf-02"></i></a>
                     </td>
                 </tr>
             @empty

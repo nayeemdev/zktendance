@@ -5,9 +5,9 @@
 @section('content')
 @php($isAdmin = request()->routeIs('admin.*'))
 <x-page-header>
-    <a href="{{ $isAdmin ? route('admin.payslips.pdf', $payslip) : route('portal.payslips.pdf', $payslip) }}" class="btn btn-primary"><i class="bi bi-file-pdf"></i> Download PDF</a>
+    <a href="{{ $isAdmin ? route('admin.payslips.pdf', $payslip) : route('portal.payslips.pdf', $payslip) }}" class="btn btn-primary"><i class="hgi-stroke hgi-pdf-02"></i> Download PDF</a>
     @if ($isAdmin && ! $payslip->payrollRun->isDraft())
-        <x-post-button :action="route('admin.payslips.email', $payslip)" label="Email" icon="envelope" />
+        <x-post-button :action="route('admin.payslips.email', $payslip)" label="Email" icon="mail-01" />
     @endif
     <a href="{{ $isAdmin ? route('admin.payroll.show', $payslip->payrollRun) : route('portal.payslips.index') }}" class="btn btn-light">Back</a>
 </x-page-header>
@@ -36,7 +36,7 @@
                             <span class="badge align-self-center text-bg-{{ $item->type === 'earning' ? 'success' : 'danger' }}">{{ $item->type === 'earning' ? '+' : '-' }}</span>
                             <input name="name" value="{{ $item->name }}" class="form-control form-control-sm">
                             <input name="amount" type="number" step="0.01" min="0" value="{{ $item->amount }}" class="form-control form-control-sm" style="width: 110px">
-                            <button class="btn btn-sm btn-outline-primary" title="Save"><i class="bi bi-check"></i></button>
+                            <button class="btn btn-sm btn-outline-primary" title="Save"><i class="hgi-stroke hgi-tick-02"></i></button>
                         </form>
                     @endforeach
                     <div class="d-flex flex-wrap gap-1 mb-3">
@@ -44,7 +44,7 @@
                             <form method="POST" action="{{ route('admin.payslip-items.destroy', $item) }}" data-confirm="Remove {{ $item->name }}?">
                                 @csrf
                                 @method('DELETE')
-                                <button class="btn btn-sm btn-light border" title="Remove"><i class="bi bi-x"></i> {{ \Illuminate\Support\Str::limit($item->name, 18) }}</button>
+                                <button class="btn btn-sm btn-light border" title="Remove"><i class="hgi-stroke hgi-cancel-01"></i> {{ \Illuminate\Support\Str::limit($item->name, 18) }}</button>
                             </form>
                         @endforeach
                     </div>

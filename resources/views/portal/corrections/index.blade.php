@@ -4,7 +4,7 @@
 
 @section('content')
 <x-page-header subtitle="Forgot to punch or the device missed you? Ask HR to fix it.">
-    <a href="{{ route('portal.corrections.create') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> New Request</a>
+    <a href="{{ route('portal.corrections.create') }}" class="btn btn-primary"><i class="hgi-stroke hgi-add-01"></i> New Request</a>
 </x-page-header>
 
 <div class="card">

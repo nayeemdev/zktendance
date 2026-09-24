@@ -12,7 +12,7 @@
 </form>
 
 <x-page-header subtitle="Remaining / total days. Balances are created every 1 January and carry forward unused days where allowed.">
-    <x-post-button :action="route('admin.leave-balances.allocate')" :label="'Allocate '.$year.' balances'" icon="arrow-repeat">
+    <x-post-button :action="route('admin.leave-balances.allocate')" :label="'Allocate '.$year.' balances'" icon="refresh">
         <input type="hidden" name="year" value="{{ $year }}">
     </x-post-button>
 </x-page-header>

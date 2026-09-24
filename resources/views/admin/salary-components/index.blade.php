@@ -4,7 +4,7 @@
 
 @section('content')
 <x-page-header subtitle="Components are the lines on a payslip. Their amounts are set in salary structures.">
-    <a href="{{ route('admin.salary-components.create') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add Component</a>
+    <a href="{{ route('admin.salary-components.create') }}" class="btn btn-primary"><i class="hgi-stroke hgi-add-01"></i> Add Component</a>
 </x-page-header>
 
 <div class="card col-lg-9">
@@ -20,7 +20,7 @@
                     <td>{{ $item->is_taxable ? 'Yes' : 'No' }}</td>
                     <td>{{ $item->sort_order }}</td>
                     <td class="text-end text-nowrap">
-                        <a href="{{ route('admin.salary-components.edit', $item) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a>
+                        <a href="{{ route('admin.salary-components.edit', $item) }}" class="btn btn-sm btn-outline-secondary"><i class="hgi-stroke hgi-edit-02"></i></a>
                         <x-delete-button :action="route('admin.salary-components.destroy', $item)" message="Delete this component? It will be removed from all structures." />
                     </td>
                 </tr>

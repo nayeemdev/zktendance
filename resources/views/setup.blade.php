@@ -4,11 +4,15 @@
 
 @section('content')
 <div class="row justify-content-center">
-    <div class="col-lg-8">
-        <div class="text-center mb-4">
-            <i class="bi bi-gear-wide-connected display-5 text-primary"></i>
-            <h1 class="h3 mt-2">Welcome! Let's set up your office</h1>
-            <p class="text-muted">These settings can be changed later from Settings.</p>
+    <div class="col-12">
+        <div class="hero mb-4">
+            <div class="position-relative d-flex align-items-center gap-3" style="z-index: 1">
+                <span class="brand-mark" style="width: 52px; height: 52px; font-size: 1.6rem"><i class="hgi-stroke hgi-fingerprint-scan"></i></span>
+                <div>
+                    <h1 class="h3 mb-1">Welcome! Let's set up your office</h1>
+                    <div class="opacity-75">Four quick steps. Everything can be changed later in Settings.</div>
+                </div>
+            </div>
         </div>
 
         @include('layouts.partials.alerts')

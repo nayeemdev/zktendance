@@ -4,7 +4,7 @@
 
 @section('content')
 <x-page-header :title="$device->name" :subtitle="$device->branch->name.' · '.($device->model ?? 'ZKTeco').' · '.ucfirst($device->connection_mode).' mode'">
-    <a href="{{ route('admin.devices.edit', $device) }}" class="btn btn-outline-secondary"><i class="bi bi-pencil"></i> Edit</a>
+    <a href="{{ route('admin.devices.edit', $device) }}" class="btn btn-outline-secondary"><i class="hgi-stroke hgi-edit-02"></i> Edit</a>
     <x-delete-button :action="route('admin.devices.destroy', $device)" message="Remove this device? Downloaded punches will be kept." label="Remove" />
 </x-page-header>
 
@@ -34,13 +34,13 @@
             <div class="card-header bg-white fw-semibold">Actions</div>
             <div class="card-body d-grid gap-2">
                 @unless ($device->isPush())
-                    <x-post-button :action="route('admin.devices.test', $device)" label="Test Connection" icon="plug" />
+                    <x-post-button :action="route('admin.devices.test', $device)" label="Test Connection" icon="plug-socket" />
                     <x-post-button :action="route('admin.devices.sync', $device)" label="Download Punches Now" icon="cloud-download" style="primary" />
                 @endunless
-                <a href="{{ route('admin.devices.users', $device) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-people"></i> Device Users &amp; Import</a>
-                <x-post-button :action="route('admin.devices.push-users', $device)" label="Send Branch Employees to Device" icon="person-up" confirm="Send all active employees of this branch who have a device ID?" />
-                <x-post-button :action="route('admin.devices.sync-time', $device)" label="Sync Device Time" icon="clock-history" />
-                <x-post-button :action="route('admin.devices.restart', $device)" label="Restart Device" icon="arrow-repeat" style="outline-warning" confirm="Restart the device?" />
+                <a href="{{ route('admin.devices.users', $device) }}" class="btn btn-sm btn-outline-primary"><i class="hgi-stroke hgi-user-group"></i> Device Users &amp; Import</a>
+                <x-post-button :action="route('admin.devices.push-users', $device)" label="Send Branch Employees to Device" icon="upload-04" confirm="Send all active employees of this branch who have a device ID?" />
+                <x-post-button :action="route('admin.devices.sync-time', $device)" label="Sync Device Time" icon="clock-04" />
+                <x-post-button :action="route('admin.devices.restart', $device)" label="Restart Device" icon="refresh" style="outline-warning" confirm="Restart the device?" />
                 <x-post-button :action="route('admin.devices.clear-logs', $device)" label="Clear Device Logs" icon="eraser" style="outline-danger" confirm="Delete all punches stored on the device? Download them first." />
             </div>
         </div>

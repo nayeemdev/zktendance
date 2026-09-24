@@ -28,7 +28,7 @@
                     <td class="small">
                         @if ($log->event === 'updated')
                             @foreach ($log->new_values ?? [] as $field => $value)
-                                <div><strong>{{ str($field)->headline() }}:</strong> <span class="text-danger text-decoration-line-through">{{ is_array($log->old_values[$field] ?? null) ? json_encode($log->old_values[$field]) : \Illuminate\Support\Str::limit((string) ($log->old_values[$field] ?? ''), 60) }}</span> <i class="bi bi-arrow-right"></i> <span class="text-success">{{ is_array($value) ? json_encode($value) : \Illuminate\Support\Str::limit((string) $value, 60) }}</span></div>
+                                <div><strong>{{ str($field)->headline() }}:</strong> <span class="text-danger text-decoration-line-through">{{ is_array($log->old_values[$field] ?? null) ? json_encode($log->old_values[$field]) : \Illuminate\Support\Str::limit((string) ($log->old_values[$field] ?? ''), 60) }}</span> <i class="hgi-stroke hgi-arrow-right-02"></i> <span class="text-success">{{ is_array($value) ? json_encode($value) : \Illuminate\Support\Str::limit((string) $value, 60) }}</span></div>
                             @endforeach
                         @elseif ($log->event !== 'login')
                             <details>

@@ -4,7 +4,7 @@
 
 @section('content')
 <x-page-header>
-    <a href="{{ route('portal.leaves.create') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Apply for Leave</a>
+    <a href="{{ route('portal.leaves.create') }}" class="btn btn-primary"><i class="hgi-stroke hgi-add-01"></i> Apply for Leave</a>
 </x-page-header>
 
 <div class="row g-3 mb-3">

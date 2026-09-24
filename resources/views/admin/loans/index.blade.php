@@ -9,7 +9,7 @@
             <li class="nav-item"><a class="nav-link {{ request('status', 'active') === $status ? 'active' : '' }}" href="?status={{ $status }}">{{ ucfirst($status) }}</a></li>
         @endforeach
     </ul>
-    <a href="{{ route('admin.loans.create') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add Loan</a>
+    <a href="{{ route('admin.loans.create') }}" class="btn btn-primary"><i class="hgi-stroke hgi-add-01"></i> Add Loan</a>
 </div>
 
 <div class="card">
@@ -28,7 +28,7 @@
                     <td>{{ $loan->start_month->format('M Y') }}</td>
                     <td><x-badge :status="$loan->status" /></td>
                     <td class="text-end text-nowrap">
-                        <a href="{{ route('admin.loans.edit', $loan) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a>
+                        <a href="{{ route('admin.loans.edit', $loan) }}" class="btn btn-sm btn-outline-secondary"><i class="hgi-stroke hgi-edit-02"></i></a>
                         <x-delete-button :action="route('admin.loans.destroy', $loan)" />
                     </td>
                 </tr>

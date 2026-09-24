@@ -4,7 +4,7 @@
 
 @section('content')
 <x-page-header>
-    <a href="{{ route('admin.employees.create') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add Employee</a>
+    <a href="{{ route('admin.employees.create') }}" class="btn btn-primary"><i class="hgi-stroke hgi-add-01"></i> Add Employee</a>
 </x-page-header>
 
 <form class="card card-body mb-3">
@@ -13,7 +13,7 @@
         <x-select name="branch_id" :options="$branches" :value="request('branch_id')" placeholder="All Branches" class="col-md-3" />
         <x-select name="department_id" :options="$departments" :value="request('department_id')" placeholder="All Departments" class="col-md-3" />
         <x-select name="status" :options="\App\Models\Employee::STATUSES" :value="request('status')" placeholder="Any Status" class="col-md-2" />
-        <div class="col-md-1"><button class="btn btn-secondary w-100"><i class="bi bi-search"></i></button></div>
+        <div class="col-md-1"><button class="btn btn-secondary w-100"><i class="hgi-stroke hgi-search-01"></i></button></div>
     </div>
 </form>
 
@@ -32,7 +32,7 @@
                     <td>{{ $employee->designation?->name }}</td>
                     <td class="text-end">{{ $employee->currentSalary ? money($employee->currentSalary->gross_salary) : '-' }}</td>
                     <td><x-badge :status="$employee->status" /></td>
-                    <td class="text-end"><a href="{{ route('admin.employees.edit', $employee) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a></td>
+                    <td class="text-end"><a href="{{ route('admin.employees.edit', $employee) }}" class="btn btn-sm btn-outline-secondary"><i class="hgi-stroke hgi-edit-02"></i></a></td>
                 </tr>
             @empty
                 <tr><td colspan="9" class="text-muted">No employees found.</td></tr>

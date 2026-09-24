@@ -4,7 +4,7 @@
 
 @section('content')
 <x-page-header>
-    <a href="{{ route('admin.departments.create') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add Department</a>
+    <a href="{{ route('admin.departments.create') }}" class="btn btn-primary"><i class="hgi-stroke hgi-add-01"></i> Add Department</a>
 </x-page-header>
 
 <div class="card col-lg-8">
@@ -18,7 +18,7 @@
                     <td>{{ $item->code }}</td>
                     <td>{{ $item->employees_count }}</td>
                     <td class="text-end text-nowrap">
-                        <a href="{{ route('admin.departments.edit', $item) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a>
+                        <a href="{{ route('admin.departments.edit', $item) }}" class="btn btn-sm btn-outline-secondary"><i class="hgi-stroke hgi-edit-02"></i></a>
                         <x-delete-button :action="route('admin.departments.destroy', $item)" />
                     </td>
                 </tr>

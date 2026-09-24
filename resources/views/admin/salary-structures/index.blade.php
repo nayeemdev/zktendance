@@ -4,7 +4,7 @@
 
 @section('content')
 <x-page-header subtitle="A structure splits an employee's gross salary into components.">
-    <a href="{{ route('admin.salary-structures.create') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add Structure</a>
+    <a href="{{ route('admin.salary-structures.create') }}" class="btn btn-primary"><i class="hgi-stroke hgi-add-01"></i> Add Structure</a>
 </x-page-header>
 
 <div class="row g-3">
@@ -14,7 +14,7 @@
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <span class="fw-semibold">{{ $structure->name }}</span>
                     <span class="text-nowrap">
-                        <a href="{{ route('admin.salary-structures.edit', $structure) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a>
+                        <a href="{{ route('admin.salary-structures.edit', $structure) }}" class="btn btn-sm btn-outline-secondary"><i class="hgi-stroke hgi-edit-02"></i></a>
                         <x-delete-button :action="route('admin.salary-structures.destroy', $structure)" />
                     </span>
                 </div>

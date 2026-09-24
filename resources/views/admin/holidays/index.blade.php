@@ -8,7 +8,7 @@
         <input type="number" name="year" value="{{ $year }}" class="form-control" style="width: 110px">
         <button class="btn btn-outline-secondary">Show</button>
     </form>
-    <a href="{{ route('admin.holidays.create') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add Holiday</a>
+    <a href="{{ route('admin.holidays.create') }}" class="btn btn-primary"><i class="hgi-stroke hgi-add-01"></i> Add Holiday</a>
 </x-page-header>
 
 <div class="card col-lg-10">
@@ -23,7 +23,7 @@
                     <td>{{ $holiday->name }}</td>
                     <td>{{ $holiday->branch?->name ?? 'All Branches' }}</td>
                     <td class="text-end text-nowrap">
-                        <a href="{{ route('admin.holidays.edit', $holiday) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a>
+                        <a href="{{ route('admin.holidays.edit', $holiday) }}" class="btn btn-sm btn-outline-secondary"><i class="hgi-stroke hgi-edit-02"></i></a>
                         <x-delete-button :action="route('admin.holidays.destroy', $holiday)" />
                     </td>
                 </tr>

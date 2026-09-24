@@ -11,10 +11,10 @@
         <div class="col-md-2 d-flex gap-2">
             <button class="btn btn-secondary flex-fill">Show</button>
             <div class="dropdown">
-                <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown" title="Export"><i class="bi bi-download"></i></button>
+                <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown" title="Export"><i class="hgi-stroke hgi-download-04"></i></button>
                 <div class="dropdown-menu dropdown-menu-end">
-                    <button class="dropdown-item" name="export" value="xlsx"><i class="bi bi-file-earmark-excel me-2"></i>Excel</button>
-                    <button class="dropdown-item" name="export" value="csv"><i class="bi bi-filetype-csv me-2"></i>CSV</button>
+                    <button class="dropdown-item" name="export" value="xlsx"><i class="hgi-stroke hgi-xls-02 me-2"></i>Excel</button>
+                    <button class="dropdown-item" name="export" value="csv"><i class="hgi-stroke hgi-csv-02 me-2"></i>CSV</button>
                 </div>
             </div>
         </div>

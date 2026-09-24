@@ -45,8 +45,8 @@
     </div>
     @if ($rows->isNotEmpty())
         <div class="mt-3 d-flex gap-2">
-            <button name="decision" value="approved" class="btn btn-success"><i class="bi bi-check2"></i> Approve Selected</button>
-            <button name="decision" value="rejected" class="btn btn-outline-danger"><i class="bi bi-x"></i> Reject Selected</button>
+            <button name="decision" value="approved" class="btn btn-success"><i class="hgi-stroke hgi-tick-02"></i> Approve Selected</button>
+            <button name="decision" value="rejected" class="btn btn-outline-danger"><i class="hgi-stroke hgi-cancel-01"></i> Reject Selected</button>
         </div>
     @endif
 </form>
