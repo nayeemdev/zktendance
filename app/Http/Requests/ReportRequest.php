@@ -14,7 +14,7 @@ class ReportRequest extends FormRequest
             'to' => ['nullable', 'date', 'after_or_equal:from'],
             'branch_id' => ['nullable', 'exists:branches,id'],
             'department_id' => ['nullable', 'exists:departments,id'],
-            'export' => ['nullable', 'boolean'],
+            'export' => ['nullable', 'in:csv,xlsx'],
         ];
     }
 }

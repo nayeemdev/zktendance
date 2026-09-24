@@ -24,14 +24,14 @@ class ReportController extends Controller
         $month = Carbon::parse($request->input('month', now()->format('Y-m')).'-01');
         $rows = $this->reports->monthlySummary($month, $request->validated());
 
-        if ($request->boolean('export')) {
-            return $this->reports->csv('attendance-summary-'.$month->format('Y-m').'.csv',
+        if ($request->filled('export')) {
+            return $this->reports->export('attendance-summary-'.$month->format('Y-m'),
                 ['Code', 'Name', 'Branch', 'Department', 'Present', 'Late', 'Absent', 'Paid Leave', 'Unpaid Leave', 'Off Days', 'Late Minutes', 'OT Hours'],
                 $rows->map(fn ($r) => [
                     $r['employee']->employee_code, $r['employee']->name, $r['employee']->branch?->name, $r['employee']->department?->name,
                     $r['present'], $r['late'], $r['absent'], $r['leave'], $r['unpaid_leave'], $r['off'], $r['late_minutes'],
                     round(($r['ot_workday_minutes'] + $r['ot_offday_minutes']) / 60, 2),
-                ]));
+                ]), $request->export);
         }
 
         return view('admin.reports.monthly-summary', $this->filters() + compact('rows', 'month'));
@@ -42,10 +42,10 @@ class ReportController extends Controller
         $month = Carbon::parse($request->input('month', now()->format('Y-m')).'-01');
         $sheet = $this->reports->monthlySheet($month, $request->validated());
 
-        if ($request->boolean('export')) {
+        if ($request->filled('export')) {
             $codes = [Attendance::PRESENT => 'P', Attendance::LATE => 'L', Attendance::HALF_DAY => 'HD', Attendance::ABSENT => 'A', Attendance::LEAVE => 'LV', Attendance::UNPAID_LEAVE => 'UL', Attendance::HOLIDAY => 'H', Attendance::WEEKEND => 'W'];
 
-            return $this->reports->csv('attendance-sheet-'.$month->format('Y-m').'.csv',
+            return $this->reports->export('attendance-sheet-'.$month->format('Y-m'),
                 array_merge(['Code', 'Name'], range(1, $sheet['days'])),
                 $sheet['employees']->map(function ($e) use ($sheet, $codes) {
                     $row = [$e->employee_code, $e->name];
@@ -55,7 +55,7 @@ class ReportController extends Controller
                     }
 
                     return $row;
-                }));
+                }), $request->export);
         }
 
         return view('admin.reports.monthly-sheet', $this->filters() + $sheet + compact('month'));
@@ -75,10 +75,10 @@ class ReportController extends Controller
             ->orderBy('date')
             ->get();
 
-        if ($request->boolean('export')) {
-            return $this->reports->csv('late-early-report.csv',
+        if ($request->filled('export')) {
+            return $this->reports->export('late-early-report',
                 ['Date', 'Code', 'Name', 'Check In', 'Check Out', 'Late Minutes', 'Early Leave Minutes'],
-                $rows->map(fn ($r) => [$r->date->toDateString(), $r->employee->employee_code, $r->employee->name, $r->check_in?->format('H:i'), $r->check_out?->format('H:i'), $r->late_minutes, $r->early_leave_minutes]));
+                $rows->map(fn ($r) => [$r->date->toDateString(), $r->employee->employee_code, $r->employee->name, $r->check_in?->format('H:i'), $r->check_out?->format('H:i'), $r->late_minutes, $r->early_leave_minutes]), $request->export);
         }
 
         return view('admin.reports.late', $this->filters() + compact('rows', 'from', 'to'));

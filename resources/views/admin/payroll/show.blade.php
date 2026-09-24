@@ -4,7 +4,8 @@
 
 @section('content')
 <x-page-header :title="$run->title()">
-    <a href="{{ route('admin.payroll.export', $run) }}" class="btn btn-outline-secondary"><i class="bi bi-download"></i> Export CSV</a>
+    <a href="{{ route('admin.payroll.export', [$run, 'format' => 'xlsx']) }}" class="btn btn-outline-success"><i class="bi bi-file-earmark-excel"></i> Excel</a>
+    <a href="{{ route('admin.payroll.export', $run) }}" class="btn btn-outline-secondary"><i class="bi bi-filetype-csv"></i> CSV</a>
     @if ($run->isDraft())
         <x-post-button :action="route('admin.payroll.regenerate', $run)" label="Regenerate" icon="arrow-repeat" style="outline-primary" confirm="Recalculate all payslips from the latest data? Manual line edits will be replaced." />
         <x-post-button :action="route('admin.payroll.approve', $run)" label="Approve" icon="check2-circle" style="success" confirm="Approve this payroll? Loan installments will be recorded and payslips will be visible to employees." />
