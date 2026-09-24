@@ -18,11 +18,9 @@ class CorrectionService
     {
         $correction = $employee->corrections()->create($data);
 
-        $this->notifications->staff(
-            'New attendance correction',
-            "{$employee->name} asked to correct attendance for {$correction->date->format('d M Y')}.",
-            route('admin.corrections.index')
-        );
+        $message = "{$employee->name} asked to correct attendance for {$correction->date->format('d M Y')}.";
+        $this->notifications->staff('New attendance correction', $message, route('admin.corrections.index'));
+        $this->notifications->branchManagers($employee->branch_id, 'New attendance correction', $message, route('admin.corrections.index'));
 
         return $correction;
     }

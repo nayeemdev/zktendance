@@ -53,6 +53,7 @@
             <div class="card mb-3">
                 <div class="card-header bg-white fw-semibold">Portal Login</div>
                 <div class="card-body">
+                    <x-select name="login_role" label="Login Role" :options="['employee' => 'Employee', 'manager' => 'Branch Manager of this branch']" :value="$employee->user?->role === 'manager' ? 'manager' : 'employee'" />
                     @if ($employee->user)
                         <p class="small text-muted">Login email: {{ $employee->user->email }}</p>
                         <input type="hidden" name="create_login" value="1">

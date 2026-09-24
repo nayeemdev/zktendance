@@ -1,2 +1,2 @@
-@props(['status', 'colors' => ['pending' => 'warning', 'approved' => 'success', 'rejected' => 'danger', 'cancelled' => 'secondary', 'active' => 'success', 'completed' => 'secondary', 'paused' => 'warning', 'draft' => 'secondary', 'paid' => 'success', 'done' => 'success', 'sent' => 'info', 'failed' => 'danger']])
+@props(['status', 'colors' => ['pending' => 'warning', 'recommended' => 'info', 'approved' => 'success', 'rejected' => 'danger', 'cancelled' => 'secondary', 'active' => 'success', 'completed' => 'secondary', 'paused' => 'warning', 'draft' => 'secondary', 'paid' => 'success', 'done' => 'success', 'sent' => 'info', 'failed' => 'danger']])
 <span class="badge text-bg-{{ $colors[$status] ?? 'secondary' }}">{{ ucfirst(str_replace('_', ' ', $status)) }}</span>

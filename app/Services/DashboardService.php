@@ -29,9 +29,9 @@ class DashboardService
             'late' => $todayRows[Attendance::LATE] ?? 0,
             'absent' => $todayRows[Attendance::ABSENT] ?? 0,
             'on_leave' => ($todayRows[Attendance::LEAVE] ?? 0) + ($todayRows[Attendance::UNPAID_LEAVE] ?? 0),
-            'pending_leaves' => LeaveRequest::where('status', 'pending')->count(),
-            'pending_corrections' => AttendanceCorrection::where('status', 'pending')->count(),
-            'devices' => Device::with('branch')->where('is_active', true)->get(),
+            'pending_leaves' => LeaveRequest::whereIn('status', ['pending', 'recommended'])->whereIn('employee_id', (clone $employees)->select('id'))->count(),
+            'pending_corrections' => AttendanceCorrection::where('status', 'pending')->whereIn('employee_id', (clone $employees)->select('id'))->count(),
+            'devices' => Device::with('branch')->where('is_active', true)->when($branchId, fn ($q) => $q->where('branch_id', $branchId))->get(),
             'chart' => $this->lastDays(14, $branchId),
         ];
     }

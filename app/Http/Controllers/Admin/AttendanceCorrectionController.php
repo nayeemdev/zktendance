@@ -15,6 +15,7 @@ class AttendanceCorrectionController extends Controller
     {
         $corrections = AttendanceCorrection::with(['employee', 'reviewer'])
             ->where('status', $request->input('status', 'pending'))
+            ->when($request->user()->managedBranchId(), fn ($q, $id) => $q->whereHas('employee', fn ($e) => $e->where('branch_id', $id)))
             ->latest()
             ->paginate(25)
             ->withQueryString();
@@ -24,6 +25,7 @@ class AttendanceCorrectionController extends Controller
 
     public function approve(Request $request, AttendanceCorrection $correction)
     {
+        abort_unless($request->user()->canManageEmployee($correction->employee), 403);
         $this->service->approve($correction, $request->user());
 
         return back()->with('success', 'Correction approved and attendance updated.');
@@ -31,6 +33,7 @@ class AttendanceCorrectionController extends Controller
 
     public function reject(Request $request, AttendanceCorrection $correction)
     {
+        abort_unless($request->user()->canManageEmployee($correction->employee), 403);
         $this->service->reject($correction, $request->user());
 
         return back()->with('success', 'Correction rejected.');

@@ -11,7 +11,7 @@ class LeaveRequest extends Model
 {
     use Auditable;
 
-    public const STATUS_COLORS = ['pending' => 'warning', 'approved' => 'success', 'rejected' => 'danger', 'cancelled' => 'secondary'];
+    public const STATUS_COLORS = ['pending' => 'warning', 'recommended' => 'info', 'approved' => 'success', 'rejected' => 'danger', 'cancelled' => 'secondary'];
 
     protected $guarded = ['id'];
 
@@ -25,6 +25,7 @@ class LeaveRequest extends Model
             'is_half_day' => 'boolean',
             'days' => 'float',
             'reviewed_at' => 'datetime',
+            'recommended_at' => 'datetime',
         ];
     }
 
@@ -36,6 +37,16 @@ class LeaveRequest extends Model
     public function leaveType(): BelongsTo
     {
         return $this->belongsTo(LeaveType::class);
+    }
+
+    public function recommender(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'recommended_by');
+    }
+
+    public function isOpen(): bool
+    {
+        return in_array($this->status, ['pending', 'recommended']);
     }
 
     public function reviewer(): BelongsTo

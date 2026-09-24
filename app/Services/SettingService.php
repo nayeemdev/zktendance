@@ -30,6 +30,7 @@ class SettingService
         'payslip_footer' => 'This is a system generated payslip.',
         'email_payslips' => false,
         'email_notifications' => true,
+        'leave_approval_levels' => 1,
         'device_offline_minutes' => 30,
         'setup_completed' => false,
     ];

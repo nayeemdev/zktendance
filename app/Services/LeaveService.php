@@ -62,7 +62,7 @@ class LeaveService
         }
 
         $overlap = $employee->leaveRequests()
-            ->whereIn('status', ['pending', 'approved'])
+            ->whereIn('status', ['pending', 'recommended', 'approved'])
             ->whereDate('start_date', '<=', $end)
             ->whereDate('end_date', '>=', $start)
             ->exists();
@@ -81,11 +81,12 @@ class LeaveService
             'reason' => $data['reason'] ?? null,
         ]);
 
-        $this->notifications->staff(
-            'New leave request',
-            "{$employee->name} applied for {$days} day(s) of {$type->name} from {$start->format('d M Y')}.",
-            route('admin.leaves.index')
-        );
+        $message = "{$employee->name} applied for {$days} day(s) of {$type->name} from {$start->format('d M Y')}.";
+        $managers = $this->notifications->branchManagers($employee->branch_id, 'New leave request', $message, route('admin.leaves.index'));
+
+        if (! $this->twoLevel() || $managers === 0) {
+            $this->notifications->staff('New leave request', $message, route('admin.leaves.index'));
+        }
 
         return $leave;
     }
@@ -107,6 +108,46 @@ class LeaveService
 
         $this->attendance->processRange($request->start_date, $request->end_date, [$request->employee_id]);
         $this->notifyEmployee($request, 'approved');
+    }
+
+    public function recommend(LeaveRequest $request, User $manager, ?string $note = null): void
+    {
+        $request->update([
+            'status' => 'recommended',
+            'recommended_by' => $manager->id,
+            'recommended_at' => now(),
+            'review_note' => $note,
+        ]);
+
+        $this->notifications->staff(
+            'Leave recommended',
+            "{$manager->name} recommended {$request->employee->name}'s {$request->leaveType->name} from {$request->start_date->format('d M Y')}. Final approval is needed.",
+            route('admin.leaves.index', ['status' => 'recommended'])
+        );
+    }
+
+    public function canApprove(User $user, LeaveRequest $request): bool
+    {
+        if (! $request->isOpen() || ! $user->canManageEmployee($request->employee)) {
+            return false;
+        }
+
+        return $user->isStaff() || ! $this->twoLevel();
+    }
+
+    public function canRecommend(User $user, LeaveRequest $request): bool
+    {
+        return $this->twoLevel() && $user->isManager() && $request->status === 'pending' && $user->canManageEmployee($request->employee);
+    }
+
+    public function canReject(User $user, LeaveRequest $request): bool
+    {
+        return $request->isOpen() && $user->canManageEmployee($request->employee);
+    }
+
+    public function twoLevel(): bool
+    {
+        return (int) setting('leave_approval_levels', 1) === 2;
     }
 
     public function reject(LeaveRequest $request, User $reviewer, ?string $note = null): void

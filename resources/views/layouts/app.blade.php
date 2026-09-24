@@ -23,7 +23,7 @@
             <span class="fw-semibold text-truncate">{{ setting('company_name') }}</span>
         </a>
         <div class="flex-grow-1 overflow-auto pb-3">
-            @if($user->isStaff())
+            @if($user->isStaff() || $user->isManager())
                 @include('layouts.partials.admin-menu')
             @endif
             @if($user->employee)

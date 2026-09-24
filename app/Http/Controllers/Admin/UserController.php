@@ -4,18 +4,19 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
+use App\Models\Branch;
 use App\Models\User;
 
 class UserController extends Controller
 {
     public function index()
     {
-        return view('admin.users.index', ['users' => User::whereIn('role', [User::ROLE_ADMIN, User::ROLE_HR])->orderBy('name')->get()]);
+        return view('admin.users.index', ['users' => User::with('branch')->whereIn('role', [User::ROLE_ADMIN, User::ROLE_HR, User::ROLE_MANAGER])->orderBy('name')->get()]);
     }
 
     public function create()
     {
-        return view('admin.users.form', ['user' => new User(['role' => User::ROLE_HR, 'is_active' => true])]);
+        return view('admin.users.form', ['user' => new User(['role' => User::ROLE_HR, 'is_active' => true]), 'branches' => Branch::pluck('name', 'id')]);
     }
 
     public function store(UserRequest $request)
@@ -27,7 +28,7 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        return view('admin.users.form', compact('user'));
+        return view('admin.users.form', ['user' => $user, 'branches' => Branch::pluck('name', 'id')]);
     }
 
     public function update(UserRequest $request, User $user)

@@ -17,14 +17,16 @@ class LeaveRequestController extends Controller
 
     public function index(Request $request)
     {
-        $leaves = LeaveRequest::with(['employee', 'leaveType', 'reviewer'])
+        $branchId = $request->user()->managedBranchId();
+        $leaves = LeaveRequest::with(['employee', 'leaveType', 'reviewer', 'recommender'])
             ->when($request->input('status', 'pending'), fn ($q, $status) => $status === 'all' ? $q : $q->where('status', $status))
+            ->when($branchId, fn ($q, $id) => $q->whereHas('employee', fn ($e) => $e->where('branch_id', $id)))
             ->when($request->employee_id, fn ($q, $id) => $q->where('employee_id', $id))
             ->latest()
             ->paginate(25)
             ->withQueryString();
 
-        return view('admin.leaves.index', compact('leaves'));
+        return view('admin.leaves.index', ['leaves' => $leaves, 'service' => $this->service]);
     }
 
     public function create()
@@ -46,9 +48,17 @@ class LeaveRequestController extends Controller
         return redirect()->route('admin.leaves.index', ['status' => $leave->fresh()->status])->with('success', 'Leave saved.');
     }
 
+    public function recommend(LeaveReviewRequest $request, LeaveRequest $leave)
+    {
+        abort_unless($this->service->canRecommend($request->user(), $leave), 403);
+        $this->service->recommend($leave, $request->user(), $request->review_note);
+
+        return back()->with('success', 'Leave recommended. HR will give the final approval.');
+    }
+
     public function approve(LeaveReviewRequest $request, LeaveRequest $leave)
     {
-        abort_unless($leave->status === 'pending', 422);
+        abort_unless($this->service->canApprove($request->user(), $leave), 403);
         $this->service->approve($leave, $request->user(), $request->review_note);
 
         return back()->with('success', 'Leave approved.');
@@ -56,7 +66,7 @@ class LeaveRequestController extends Controller
 
     public function reject(LeaveReviewRequest $request, LeaveRequest $leave)
     {
-        abort_unless($leave->status === 'pending', 422);
+        abort_unless($this->service->canReject($request->user(), $leave), 403);
         $this->service->reject($leave, $request->user(), $request->review_note);
 
         return back()->with('success', 'Leave rejected.');
@@ -64,7 +74,7 @@ class LeaveRequestController extends Controller
 
     public function cancel(Request $request, LeaveRequest $leave)
     {
-        abort_unless(in_array($leave->status, ['pending', 'approved']), 422);
+        abort_unless($leave->isOpen() || $leave->status === 'approved', 422);
         $this->service->cancel($leave, $request->user());
 
         return back()->with('success', 'Leave cancelled.');
