@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DeviceRequest;
+use App\Http\Requests\DeviceUserImportRequest;
+use App\Http\Requests\DeviceUserLinkRequest;
 use App\Models\Branch;
 use App\Models\Device;
 use App\Models\Employee;
 use App\Services\DeviceService;
+use App\Services\EmployeeService;
 use Illuminate\Support\Facades\Cache;
 use Throwable;
 
@@ -102,15 +105,37 @@ class DeviceController extends Controller
 
     public function users(Device $device)
     {
-        try {
-            $users = $this->service->deviceUsers($device);
-        } catch (Throwable $e) {
-            return back()->with('error', $e->getMessage());
-        }
+        return view('admin.devices.users', [
+            'device' => $device,
+            'users' => $device->users()->with('employee')->get()->sortBy(fn ($u) => (int) $u->user_id)->values(),
+            'unlinked' => Employee::active()->whereNull('device_user_id')->orderBy('name')->get()->mapWithKeys(fn ($e) => [$e->id => "{$e->employee_code} - {$e->name}"]),
+        ]);
+    }
 
-        $employees = Employee::whereIn('device_user_id', array_column($users, 'user_id'))->get()->keyBy('device_user_id');
+    public function refreshUsers(Device $device)
+    {
+        return $this->attempt(function () use ($device) {
+            $count = $this->service->refreshUsers($device);
 
-        return view('admin.devices.users', compact('device', 'users', 'employees'));
+            return $device->isPush()
+                ? 'The device was asked to upload its users. Refresh this page in a minute.'
+                : "{$count} users read from the device.";
+        });
+    }
+
+    public function importUsers(DeviceUserImportRequest $request, Device $device, EmployeeService $employees)
+    {
+        $count = $employees->importFromDevice($device, $request->validated('user_ids'));
+
+        return back()->with('success', "{$count} employees created. Complete their details and salary from the Employees page.");
+    }
+
+    public function linkUser(DeviceUserLinkRequest $request, Device $device, EmployeeService $employees)
+    {
+        $employee = Employee::findOrFail($request->validated('employee_id'));
+        $employees->linkDeviceUser($employee, $request->validated('user_id'));
+
+        return back()->with('success', "{$employee->name} is now linked to device user {$request->validated('user_id')}.");
     }
 
     public function restart(Device $device)

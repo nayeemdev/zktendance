@@ -36,8 +36,8 @@
                 @unless ($device->isPush())
                     <x-post-button :action="route('admin.devices.test', $device)" label="Test Connection" icon="plug" />
                     <x-post-button :action="route('admin.devices.sync', $device)" label="Download Punches Now" icon="cloud-download" style="primary" />
-                    <a href="{{ route('admin.devices.users', $device) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-people"></i> View Device Users</a>
                 @endunless
+                <a href="{{ route('admin.devices.users', $device) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-people"></i> Device Users &amp; Import</a>
                 <x-post-button :action="route('admin.devices.push-users', $device)" label="Send Branch Employees to Device" icon="person-up" confirm="Send all active employees of this branch who have a device ID?" />
                 <x-post-button :action="route('admin.devices.sync-time', $device)" label="Sync Device Time" icon="clock-history" />
                 <x-post-button :action="route('admin.devices.restart', $device)" label="Restart Device" icon="arrow-repeat" style="outline-warning" confirm="Restart the device?" />

@@ -53,6 +53,11 @@ class Device extends Model
         return $this->hasMany(AttendanceLog::class);
     }
 
+    public function users(): HasMany
+    {
+        return $this->hasMany(DeviceUser::class);
+    }
+
     public function commands(): HasMany
     {
         return $this->hasMany(DeviceCommand::class);

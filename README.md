@@ -9,7 +9,8 @@ Office attendance, leave and payroll management for companies using ZKTeco biome
 - **ZKTeco devices**, any number per branch, in two connection modes:
   - **Pull**: the server connects to the device on UDP port 4370 and downloads punches every 5 minutes, or when you press "Download Punches Now".
   - **Push (ADMS / iClock)**: the device sends punches to the server over HTTP. Best for cloud hosting or remote branches.
-  - Test the connection, sync the device time, send employees to the device, view device users, restart, clear logs.
+  - Test the connection, sync the device time, send employees to the device, restart, clear logs.
+  - Read the users stored on a device and import them as new employees in one click, or link them to existing employees.
 - **Attendance processing** from raw punches: check in and out, worked time, late, early leave, half day, absent, overtime, weekend and holiday work. Night shifts that cross midnight are supported.
 - **Shifts** with grace minutes, half day threshold and break time.
 - **Shift roster**: assign shifts for date ranges to selected employees, a branch or a department, with optional rotation (for example morning and evening every 7 days). Weekly roster view.

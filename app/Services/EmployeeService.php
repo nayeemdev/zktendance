@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Device;
 use App\Models\Employee;
 use App\Models\User;
 use Illuminate\Support\Arr;
@@ -39,6 +40,50 @@ class EmployeeService
         $this->logs->linkEmployee($employee);
 
         return $employee;
+    }
+
+    /**
+     * @param  array<int, string>  $userIds
+     */
+    public function importFromDevice(Device $device, array $userIds): int
+    {
+        $rows = $device->users()->whereIn('user_id', $userIds)->get();
+        $taken = Employee::whereIn('device_user_id', $rows->pluck('user_id'))->pluck('device_user_id')->flip();
+        $count = 0;
+
+        foreach ($rows as $row) {
+            if (isset($taken[$row->user_id])) {
+                continue;
+            }
+
+            $this->create([
+                'employee_code' => $this->nextCode(),
+                'device_user_id' => $row->user_id,
+                'name' => $row->name ?: 'Device User '.$row->user_id,
+                'branch_id' => $device->branch_id,
+                'joining_date' => today()->toDateString(),
+            ]);
+            $count++;
+        }
+
+        return $count;
+    }
+
+    public function linkDeviceUser(Employee $employee, string $userId): void
+    {
+        Employee::where('device_user_id', $userId)->whereKeyNot($employee->id)->update(['device_user_id' => null]);
+        $employee->update(['device_user_id' => $userId]);
+        $this->logs->linkEmployee($employee);
+    }
+
+    public function nextCode(): string
+    {
+        $next = (int) Employee::max('id') + 1;
+        do {
+            $code = 'EMP'.str_pad((string) $next++, 4, '0', STR_PAD_LEFT);
+        } while (Employee::where('employee_code', $code)->exists());
+
+        return $code;
     }
 
     private function syncLogin(Employee $employee, array $data): void
