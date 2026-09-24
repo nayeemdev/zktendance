@@ -58,7 +58,7 @@ class EmployeeController extends Controller
 
     public function show(Employee $employee, SalaryService $salary, LeaveService $leaves)
     {
-        $employee->load(['branch', 'department', 'designation', 'shift', 'user', 'salaries.structure', 'loans']);
+        $employee->load(['branch', 'department', 'designation', 'shift', 'user', 'salaries.structure', 'loans', 'documents.uploader']);
         $current = $employee->salaries->first();
 
         return view('admin.employees.show', [
