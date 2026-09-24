@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Portal;
@@ -14,13 +15,18 @@ Route::middleware('guest')->group(function () {
     Route::post('setup', [SetupController::class, 'store'])->name('setup.store');
     Route::get('login', [LoginController::class, 'create'])->name('login');
     Route::post('login', [LoginController::class, 'store'])->middleware('throttle:10,1');
+    Route::get('forgot-password', [PasswordResetController::class, 'create'])->name('password.request');
+    Route::post('forgot-password', [PasswordResetController::class, 'store'])->middleware('throttle:5,1')->name('password.email');
+    Route::get('reset-password/{token}', [PasswordResetController::class, 'edit'])->name('password.reset');
+    Route::post('reset-password', [PasswordResetController::class, 'update'])->name('password.update');
 });
 
 Route::middleware('auth')->group(function () {
     Route::get('/', HomeController::class)->name('home');
     Route::post('logout', [LoginController::class, 'destroy'])->name('logout');
     Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::put('profile/password', [ProfileController::class, 'update'])->name('profile.password');
+    Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('profile/password', [ProfileController::class, 'password'])->name('profile.password');
     Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::get('notifications/{id}', [NotificationController::class, 'open'])->name('notifications.open');
     Route::post('notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.read-all');
