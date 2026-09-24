@@ -81,6 +81,10 @@ php artisan migrate:fresh --seed
 | HR | hr@example.com | password |
 | Employee | employee1@example.com | password |
 
+### Production server
+
+Step by step guide for CloudPanel, including SSL, cron, the queue worker and device setup: [docs/deploy-cloudpanel.md](docs/deploy-cloudpanel.md).
+
 ## Background jobs
 
 Add the Laravel scheduler to cron on the server:
