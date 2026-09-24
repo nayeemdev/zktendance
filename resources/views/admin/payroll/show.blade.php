@@ -6,7 +6,7 @@
 <x-page-header :title="$run->title()">
     <a href="{{ route('admin.payroll.export', $run) }}" class="btn btn-outline-secondary"><i class="bi bi-download"></i> Export CSV</a>
     @if ($run->isDraft())
-        <x-post-button :action="route('admin.payroll.regenerate', $run)" label="Regenerate" icon="arrow-repeat" style="outline-primary" confirm="Recalculate all payslips from the latest data?" />
+        <x-post-button :action="route('admin.payroll.regenerate', $run)" label="Regenerate" icon="arrow-repeat" style="outline-primary" confirm="Recalculate all payslips from the latest data? Manual line edits will be replaced." />
         <x-post-button :action="route('admin.payroll.approve', $run)" label="Approve" icon="check2-circle" style="success" confirm="Approve this payroll? Loan installments will be recorded and payslips will be visible to employees." />
         <x-delete-button :action="route('admin.payroll.destroy', $run)" message="Delete this draft payroll?" label="Delete" />
     @else
@@ -35,7 +35,7 @@
             <tbody>
             @forelse ($payslips as $payslip)
                 <tr>
-                    <td>{{ $payslip->employee->name }}<div class="small text-muted">{{ $payslip->employee->employee_code }} &middot; {{ $payslip->employee->designation?->name }}</div></td>
+                    <td>{{ $payslip->employee->name }} @if($payslip->edited_at)<span class="badge text-bg-warning">Edited</span>@endif<div class="small text-muted">{{ $payslip->employee->employee_code }} &middot; {{ $payslip->employee->designation?->name }}</div></td>
                     <td>{{ $payslip->present_days }}</td>
                     <td>{{ $payslip->absent_days + $payslip->unpaid_leave_days }}</td>
                     <td>{{ $payslip->paid_leave_days }}</td>

@@ -128,7 +128,7 @@ Commands such as sending users, restarting and clearing logs are queued and pick
 1. Make sure punches are synced, corrections and leaves are approved, and every employee has a salary.
 2. Add one time bonuses or deductions in **Bonus & Deductions**.
 3. **Payroll Runs > Run Payroll**, pick the month and optionally a branch. A draft is created.
-4. Review, fix data and **Regenerate** as often as needed.
+4. Review, fix data and **Regenerate** as often as needed. Single payslip lines can also be edited, added or removed on the payslip page while the payroll is a draft (regenerating replaces these edits).
 5. **Approve**. Loan installments are recorded and payslips become visible to employees (and are emailed if enabled in Settings).
 6. **Mark as Paid** after the bank transfer. Use **Export CSV** for the bank sheet.
 
