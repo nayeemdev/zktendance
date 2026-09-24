@@ -5,8 +5,10 @@ namespace App\Services;
 use App\Models\Employee;
 use App\Models\Holiday;
 use App\Models\LeaveBalance;
+use App\Models\LeaveEncashment;
 use App\Models\LeaveRequest;
 use App\Models\LeaveType;
+use App\Models\PayrollAdjustment;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -41,8 +43,96 @@ class LeaveService
     {
         return LeaveBalance::firstOrCreate(
             ['employee_id' => $employee->id, 'leave_type_id' => $type->id, 'year' => $year],
-            ['allocated' => $type->days_per_year, 'carried_forward' => $this->carryForwardFor($employee, $type, $year)]
+            ['allocated' => $this->allocationFor($employee, $type, $year), 'carried_forward' => $this->carryForwardFor($employee, $type, $year)]
         );
+    }
+
+    public function allocationFor(Employee $employee, LeaveType $type, int $year): float
+    {
+        if ($type->accrual !== 'monthly') {
+            return $type->days_per_year;
+        }
+
+        $from = Carbon::create($year)->startOfYear()->max($employee->joining_date->copy()->startOfMonth());
+        $to = Carbon::create($year)->endOfYear()->min(today());
+        $months = $from->lte($to) ? $from->diffInMonths($to->copy()->startOfMonth()) + 1 : 0;
+
+        return round($type->days_per_year / 12 * $months, 1);
+    }
+
+    public function eligibleTypes(Employee $employee)
+    {
+        return LeaveType::where('is_active', true)
+            ->where(fn ($q) => $q->whereNull('gender')->orWhere('gender', $employee->gender))
+            ->orderBy('name')
+            ->get();
+    }
+
+    /**
+     * @return array<int, float> days of the leave that fall in each year
+     */
+    public function yearPortions(Employee $employee, Carbon $start, Carbon $end, bool $halfDay = false): array
+    {
+        if ($start->year === $end->year) {
+            return [$start->year => $this->countDays($employee, $start, $end, $halfDay)];
+        }
+
+        return [
+            $start->year => $this->countDays($employee, $start, $start->copy()->endOfYear()->startOfDay()),
+            $end->year => $this->countDays($employee, $end->copy()->startOfYear(), $end),
+        ];
+    }
+
+    public function encash(Employee $employee, LeaveType $type, int $year, float $days, string $month, User $user): LeaveEncashment
+    {
+        if (! $type->is_encashable) {
+            throw ValidationException::withMessages(['leave_type_id' => "{$type->name} cannot be encashed."]);
+        }
+
+        $balance = $this->balance($employee, $type, $year);
+        if ($days > $balance->remaining()) {
+            throw ValidationException::withMessages(['days' => "Only {$balance->remaining()} day(s) are available."]);
+        }
+
+        $salary = $employee->salaryOn(today());
+        if (! $salary) {
+            throw ValidationException::withMessages(['employee_id' => 'This employee has no salary set.']);
+        }
+
+        $breakdown = app(SalaryService::class)->breakdown($salary->structure, $salary->gross_salary);
+        $base = setting('encashment_base') === 'gross' ? $salary->gross_salary : app(SalaryService::class)->basic($breakdown);
+        $amount = round($base / 30 * $days, 2);
+
+        return DB::transaction(function () use ($employee, $type, $year, $days, $month, $user, $balance, $amount) {
+            $adjustment = PayrollAdjustment::create([
+                'employee_id' => $employee->id,
+                'month' => $month.'-01',
+                'type' => 'earning',
+                'title' => "Leave Encashment: {$type->name} ({$days} days)",
+                'amount' => $amount,
+            ]);
+
+            $balance->increment('encashed', $days);
+
+            return LeaveEncashment::create([
+                'employee_id' => $employee->id,
+                'leave_type_id' => $type->id,
+                'payroll_adjustment_id' => $adjustment->id,
+                'year' => $year,
+                'days' => $days,
+                'amount' => $amount,
+                'created_by' => $user->id,
+            ]);
+        });
+    }
+
+    public function removeEncashment(LeaveEncashment $encashment): void
+    {
+        DB::transaction(function () use ($encashment) {
+            $this->balance($encashment->employee, $encashment->leaveType, $encashment->year)->decrement('encashed', $encashment->days);
+            $encashment->adjustment?->delete();
+            $encashment->delete();
+        });
     }
 
     public function apply(Employee $employee, array $data): LeaveRequest
@@ -51,6 +141,10 @@ class LeaveService
         $start = Carbon::parse($data['start_date']);
         $halfDay = (bool) ($data['is_half_day'] ?? false);
         $end = $halfDay ? $start->copy() : Carbon::parse($data['end_date']);
+
+        if ($type->gender && $type->gender !== $employee->gender) {
+            throw ValidationException::withMessages(['leave_type_id' => "{$type->name} is only for ".($type->gender === 'female' ? 'female' : 'male').' employees.']);
+        }
 
         if ($halfDay && ! $type->allow_half_day) {
             throw ValidationException::withMessages(['is_half_day' => 'Half day is not allowed for this leave type.']);
@@ -70,7 +164,7 @@ class LeaveService
             throw ValidationException::withMessages(['start_date' => 'You already have a leave request for these dates.']);
         }
 
-        $this->ensureBalance($employee, $type, $start->year, $days);
+        $this->ensureBalance($employee, $type, $this->yearPortions($employee, $start, $end, $halfDay));
 
         $leave = $employee->leaveRequests()->create([
             'leave_type_id' => $type->id,
@@ -94,7 +188,8 @@ class LeaveService
     public function approve(LeaveRequest $request, User $reviewer, ?string $note = null): void
     {
         DB::transaction(function () use ($request, $reviewer, $note) {
-            $this->ensureBalance($request->employee, $request->leaveType, $request->start_date->year, $request->days);
+            $portions = $this->portionsOf($request);
+            $this->ensureBalance($request->employee, $request->leaveType, $portions);
 
             $request->update([
                 'status' => 'approved',
@@ -103,7 +198,9 @@ class LeaveService
                 'review_note' => $note,
             ]);
 
-            $this->balance($request->employee, $request->leaveType, $request->start_date->year)->increment('used', $request->days);
+            foreach ($portions as $year => $days) {
+                $this->balance($request->employee, $request->leaveType, $year)->increment('used', $days);
+            }
         });
 
         $this->attendance->processRange($request->start_date, $request->end_date, [$request->employee_id]);
@@ -169,7 +266,14 @@ class LeaveService
 
         $employees->each(function (Employee $employee) use ($types, $year, &$count) {
             foreach ($types as $type) {
-                $this->balance($employee, $type, $year);
+                if ($type->gender && $type->gender !== $employee->gender) {
+                    continue;
+                }
+
+                $balance = $this->balance($employee, $type, $year);
+                if ($type->accrual === 'monthly' && ! $balance->wasRecentlyCreated) {
+                    $balance->update(['allocated' => $this->allocationFor($employee, $type, $year)]);
+                }
                 $count++;
             }
         });
@@ -183,7 +287,9 @@ class LeaveService
 
         DB::transaction(function () use ($request, $status, $user, $note, $wasApproved) {
             if ($wasApproved) {
-                $this->balance($request->employee, $request->leaveType, $request->start_date->year)->decrement('used', $request->days);
+                foreach ($this->portionsOf($request) as $year => $days) {
+                    $this->balance($request->employee, $request->leaveType, $year)->decrement('used', $days);
+                }
             }
 
             $request->update([
@@ -211,15 +317,22 @@ class LeaveService
         );
     }
 
-    private function ensureBalance(Employee $employee, LeaveType $type, int $year, float $days): void
+    private function portionsOf(LeaveRequest $request): array
+    {
+        return $this->yearPortions($request->employee, $request->start_date, $request->end_date, $request->is_half_day);
+    }
+
+    private function ensureBalance(Employee $employee, LeaveType $type, array $portions): void
     {
         if (! $type->is_paid || $type->days_per_year <= 0) {
             return;
         }
 
-        $remaining = $this->balance($employee, $type, $year)->remaining();
-        if ($days > $remaining) {
-            throw ValidationException::withMessages(['leave_type_id' => "Not enough {$type->name} balance. Remaining: {$remaining} day(s)."]);
+        foreach ($portions as $year => $days) {
+            $remaining = $this->balance($employee, $type, $year)->remaining();
+            if ($days > $remaining) {
+                throw ValidationException::withMessages(['leave_type_id' => "Not enough {$type->name} balance for {$year}. Remaining: {$remaining} day(s)."]);
+            }
         }
     }
 

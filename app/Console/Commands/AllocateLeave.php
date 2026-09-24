@@ -9,7 +9,7 @@ class AllocateLeave extends Command
 {
     protected $signature = 'leave:allocate {year? : Defaults to the current year}';
 
-    protected $description = 'Create yearly leave balances with carry forward';
+    protected $description = 'Create leave balances with carry forward and update monthly accruals';
 
     public function handle(LeaveService $service): int
     {

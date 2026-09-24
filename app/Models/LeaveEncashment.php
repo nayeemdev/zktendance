@@ -6,7 +6,7 @@ use App\Models\Concerns\Auditable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class LeaveBalance extends Model
+class LeaveEncashment extends Model
 {
     use Auditable;
 
@@ -15,10 +15,8 @@ class LeaveBalance extends Model
     protected function casts(): array
     {
         return [
-            'allocated' => 'float',
-            'carried_forward' => 'float',
-            'used' => 'float',
-            'encashed' => 'float',
+            'days' => 'float',
+            'amount' => 'float',
         ];
     }
 
@@ -32,13 +30,18 @@ class LeaveBalance extends Model
         return $this->belongsTo(LeaveType::class);
     }
 
-    public function remaining(): float
+    public function adjustment(): BelongsTo
     {
-        return round($this->allocated + $this->carried_forward - $this->used - $this->encashed, 1);
+        return $this->belongsTo(PayrollAdjustment::class, 'payroll_adjustment_id');
+    }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 
     public function auditLabel(): string
     {
-        return 'Leave balance of '.($this->employee?->name ?? '#'.$this->employee_id).' '.$this->year;
+        return 'Leave encashment of '.($this->employee?->name ?? '#'.$this->employee_id);
     }
 }

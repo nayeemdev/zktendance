@@ -31,6 +31,7 @@ class SettingService
         'email_payslips' => false,
         'email_notifications' => true,
         'leave_approval_levels' => 1,
+        'encashment_base' => 'basic',
         'device_offline_minutes' => 30,
         'setup_completed' => false,
     ];

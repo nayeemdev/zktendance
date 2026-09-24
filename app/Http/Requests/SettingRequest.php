@@ -32,6 +32,7 @@ class SettingRequest extends FormRequest
             'email_payslips' => ['boolean'],
             'email_notifications' => ['boolean'],
             'leave_approval_levels' => ['required', 'in:1,2'],
+            'encashment_base' => ['required', 'in:basic,gross'],
             'device_offline_minutes' => ['required', 'integer', 'min:5', 'max:1440'],
             'slabs' => ['nullable', 'array'],
             'slabs.*.amount' => ['nullable', 'numeric', 'min:0'],

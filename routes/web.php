@@ -66,6 +66,7 @@ Route::middleware('auth')->group(function () {
             Route::get('leave-balances', [Admin\LeaveBalanceController::class, 'index'])->name('leave-balances.index');
             Route::post('leave-balances/allocate', [Admin\LeaveBalanceController::class, 'allocate'])->name('leave-balances.allocate');
             Route::put('leave-balances/{balance}', [Admin\LeaveBalanceController::class, 'update'])->name('leave-balances.update');
+            Route::resource('leave-encashments', Admin\LeaveEncashmentController::class)->only(['index', 'create', 'store', 'destroy'])->parameters(['leave-encashments' => 'encashment']);
 
             Route::resource('salary-components', Admin\SalaryComponentController::class)->except('show');
             Route::resource('salary-structures', Admin\SalaryStructureController::class)->except('show');

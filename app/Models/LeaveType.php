@@ -19,6 +19,7 @@ class LeaveType extends Model
             'is_paid' => 'boolean',
             'allow_half_day' => 'boolean',
             'is_active' => 'boolean',
+            'is_encashable' => 'boolean',
         ];
     }
 }

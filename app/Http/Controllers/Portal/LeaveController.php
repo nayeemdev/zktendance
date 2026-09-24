@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Portal;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LeaveApplyRequest;
 use App\Models\LeaveRequest;
-use App\Models\LeaveType;
 use App\Services\LeaveService;
 use Illuminate\Http\Request;
 
@@ -19,13 +18,13 @@ class LeaveController extends Controller
 
         return view('portal.leaves.index', [
             'leaves' => $employee->leaveRequests()->with('leaveType')->latest()->paginate(20),
-            'balances' => LeaveType::where('is_active', true)->get()->map(fn ($type) => $this->service->balance($employee, $type, now()->year)->setRelation('leaveType', $type)),
+            'balances' => $this->service->eligibleTypes($employee)->map(fn ($type) => $this->service->balance($employee, $type, now()->year)->setRelation('leaveType', $type)),
         ]);
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        return view('portal.leaves.create', ['leaveTypes' => LeaveType::where('is_active', true)->get()]);
+        return view('portal.leaves.create', ['leaveTypes' => $this->service->eligibleTypes($request->user()->employee)]);
     }
 
     public function store(LeaveApplyRequest $request)

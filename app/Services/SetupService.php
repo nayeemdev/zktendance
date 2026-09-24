@@ -79,8 +79,8 @@ class SetupService
         foreach ([
             ['name' => 'Casual Leave', 'code' => 'CL', 'days_per_year' => 10, 'is_paid' => true, 'carry_forward_limit' => 0],
             ['name' => 'Sick Leave', 'code' => 'SL', 'days_per_year' => 14, 'is_paid' => true, 'carry_forward_limit' => 0],
-            ['name' => 'Earned Leave', 'code' => 'EL', 'days_per_year' => 18, 'is_paid' => true, 'carry_forward_limit' => 40, 'allow_half_day' => false],
-            ['name' => 'Maternity Leave', 'code' => 'ML', 'days_per_year' => 112, 'is_paid' => true, 'carry_forward_limit' => 0, 'allow_half_day' => false],
+            ['name' => 'Earned Leave', 'code' => 'EL', 'days_per_year' => 18, 'is_paid' => true, 'carry_forward_limit' => 40, 'allow_half_day' => false, 'is_encashable' => true],
+            ['name' => 'Maternity Leave', 'code' => 'ML', 'days_per_year' => 112, 'is_paid' => true, 'carry_forward_limit' => 0, 'allow_half_day' => false, 'gender' => 'female'],
             ['name' => 'Leave Without Pay', 'code' => 'LWP', 'days_per_year' => 0, 'is_paid' => false, 'carry_forward_limit' => 0],
         ] as $type) {
             LeaveType::firstOrCreate(['code' => $type['code']], $type);

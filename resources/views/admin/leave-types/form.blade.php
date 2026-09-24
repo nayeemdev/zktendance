@@ -12,10 +12,13 @@
                 <x-input name="name" label="Name" :value="$leaveType->name" class="col-md-8 mb-3" required />
                 <x-input name="code" label="Code" :value="$leaveType->code" class="col-md-4 mb-3" required />
                 <x-input name="days_per_year" type="number" step="0.5" label="Days per Year" :value="$leaveType->days_per_year ?? 0" class="col-md-6 mb-3" required help="Use 0 for no limit, for example unpaid leave." />
+                <x-select name="accrual" label="Credit" :options="['yearly' => 'All days on 1 January', 'monthly' => 'Monthly (days per year / 12 each month)']" :value="$leaveType->accrual" class="col-md-6 mb-3" required />
+                <x-select name="gender" label="Available To" :options="['female' => 'Female employees only', 'male' => 'Male employees only']" :value="$leaveType->gender" placeholder="Everyone" class="col-md-6 mb-3" />
                 <x-input name="carry_forward_limit" type="number" step="0.5" label="Carry Forward Limit" :value="$leaveType->carry_forward_limit ?? 0" class="col-md-6 mb-3" required help="Unused days moved to next year, up to this number." />
             </div>
             <x-checkbox name="is_paid" label="Paid leave (no salary deduction)" :checked="$leaveType->is_paid" />
             <x-checkbox name="allow_half_day" label="Allow half day" :checked="$leaveType->allow_half_day" />
+            <x-checkbox name="is_encashable" label="Unused days can be encashed" :checked="$leaveType->is_encashable" />
             <x-checkbox name="is_active" label="Active" :checked="$leaveType->is_active" />
             <button class="btn btn-primary">Save</button>
             <a href="{{ route('admin.leave-types.index') }}" class="btn btn-light">Cancel</a>
