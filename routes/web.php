@@ -107,6 +107,9 @@ Route::middleware('auth')->group(function () {
                     Route::post('sync-time', 'syncTime')->name('sync-time');
                     Route::post('push-users', 'pushUsers')->name('push-users');
                     Route::get('users', 'users')->name('users');
+                    Route::post('users/refresh', 'refreshUsers')->name('users.refresh');
+                    Route::post('users/import', 'importUsers')->name('users.import');
+                    Route::post('users/link', 'linkUser')->name('users.link');
                     Route::post('restart', 'restart')->name('restart');
                     Route::post('clear-logs', 'clearLogs')->name('clear-logs');
                 });

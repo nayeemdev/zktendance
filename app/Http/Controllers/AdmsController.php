@@ -23,8 +23,14 @@ class AdmsController extends Controller
             return $this->text('OK');
         }
 
-        if (strtoupper((string) $request->query('table')) === 'ATTLOG') {
+        $table = strtoupper((string) $request->query('table'));
+
+        if ($table === 'ATTLOG') {
             return $this->text('OK: '.$this->adms->receiveAttendance($device, $request->getContent()));
+        }
+
+        if (in_array($table, ['OPERLOG', 'USERINFO'])) {
+            return $this->text('OK: '.$this->adms->receiveUsers($device, $request->getContent()));
         }
 
         return $this->text('OK');

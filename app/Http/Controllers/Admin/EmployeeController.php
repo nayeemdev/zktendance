@@ -43,7 +43,7 @@ class EmployeeController extends Controller
             'status' => 'active',
             'employment_type' => 'permanent',
             'tax_enabled' => true,
-            'employee_code' => 'EMP'.str_pad((string) (Employee::max('id') + 1), 4, '0', STR_PAD_LEFT),
+            'employee_code' => $this->service->nextCode(),
         ]);
 
         return view('admin.employees.form', $this->options() + compact('employee'));

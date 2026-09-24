@@ -8,7 +8,10 @@ use Illuminate\Support\Facades\Cache;
 
 class AdmsService
 {
-    public function __construct(private AttendanceLogService $logs) {}
+    public function __construct(
+        private AttendanceLogService $logs,
+        private DeviceService $devices,
+    ) {}
 
     public function findDevice(?string $serial): ?Device
     {
@@ -71,6 +74,32 @@ class AdmsService
         $device->update(['last_synced_at' => now()]);
 
         return count($records);
+    }
+
+    public function receiveUsers(Device $device, string $body): int
+    {
+        $users = [];
+
+        foreach (preg_split('/\r\n|\n|\r/', trim($body)) as $line) {
+            $line = preg_replace('/^USER\s+/', '', trim($line));
+            if (! str_starts_with($line, 'PIN=')) {
+                continue;
+            }
+
+            $fields = [];
+            foreach (explode("\t", $line) as $pair) {
+                [$key, $value] = array_pad(explode('=', $pair, 2), 2, '');
+                $fields[$key] = $value;
+            }
+
+            $users[] = ['user_id' => $fields['PIN'], 'name' => $fields['Name'] ?? null];
+        }
+
+        if ($users) {
+            $this->devices->storeUsers($device, $users, false);
+        }
+
+        return count($users);
     }
 
     public function pendingCommands(Device $device): string

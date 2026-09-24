@@ -30,9 +30,37 @@ class DeviceService
         return $count;
     }
 
-    public function deviceUsers(Device $device): array
+    public function refreshUsers(Device $device): int
     {
-        return $this->run($device, fn () => $this->client->users());
+        if ($device->isPush()) {
+            $this->queueCommand($device, 'DATA QUERY USERINFO');
+
+            return 0;
+        }
+
+        $users = $this->run($device, fn () => $this->client->users());
+        $this->storeUsers($device, $users);
+
+        return count($users);
+    }
+
+    /**
+     * @param  array<int, array{user_id: string, name?: string|null, uid?: int|null}>  $users
+     */
+    public function storeUsers(Device $device, array $users, bool $replace = true): void
+    {
+        $users = array_filter($users, fn ($u) => trim((string) $u['user_id']) !== '');
+
+        foreach ($users as $user) {
+            $device->users()->updateOrCreate(
+                ['user_id' => trim((string) $user['user_id'])],
+                ['name' => $user['name'] ?? null, 'uid' => $user['uid'] ?? null]
+            );
+        }
+
+        if ($replace) {
+            $device->users()->whereNotIn('user_id', array_map(fn ($u) => trim((string) $u['user_id']), $users))->delete();
+        }
     }
 
     public function syncTime(Device $device): void
@@ -83,7 +111,7 @@ class DeviceService
             return $employees->count();
         }
 
-        return $this->run($device, function () use ($employees) {
+        return $this->run($device, function () use ($device, $employees) {
             $existing = collect($this->client->users())->keyBy('user_id');
             $nextUid = (int) $existing->max('uid') + 1;
             $count = 0;
@@ -94,6 +122,8 @@ class DeviceService
                     $count++;
                 }
             }
+
+            $this->storeUsers($device, $this->client->users());
 
             return $count;
         });
