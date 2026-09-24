@@ -1,43 +1,111 @@
+<div align="center">
+
 # ZKTendance
 
-Office attendance, leave and payroll management for companies using ZKTeco biometric devices. Built with Laravel 13.
+**Attendance, leave and payroll management for offices that use ZKTeco biometric devices.**
+
+Multi branch · Multi device · ADMS push and UDP pull · Shift roster · Overtime · Bangladesh income tax · PDF payslips
+
+[![Tests](https://github.com/nayeemdev/zktendance/actions/workflows/tests.yml/badge.svg)](https://github.com/nayeemdev/zktendance/actions/workflows/tests.yml)
+![PHP](https://img.shields.io/badge/PHP-8.3%2B-777BB4?logo=php&logoColor=white)
+![Laravel](https://img.shields.io/badge/Laravel-13-FF2D20?logo=laravel&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-8-4479A1?logo=mysql&logoColor=white)
+
+[Website](https://attendance.nayeem.me) · [Deployment guide](docs/deploy-cloudpanel.md) · [Report an issue](https://github.com/nayeemdev/zktendance/issues)
+
+<br>
+
+<img src="docs/images/dashboard.webp" alt="ZKTendance admin dashboard with attendance rate, stat tiles, a 14 day attendance chart and device status" width="100%">
+
+</div>
+
+---
+
+## Contents
+
+- [Why ZKTendance](#why-zktendance)
+- [Features](#features)
+- [Tech stack](#tech-stack)
+- [Quick start](#quick-start)
+- [Connecting ZKTeco devices](#connecting-zkteco-devices)
+- [Background jobs](#background-jobs)
+- [Payroll workflow](#payroll-workflow)
+- [Deployment](#deployment)
+- [Project structure](#project-structure)
+- [Testing](#testing)
+
+## Why ZKTendance
+
+ZKTeco terminals record punches, but turning those punches into attendance, leave balances and salaries is usually done by hand in spreadsheets. ZKTendance connects to your devices, builds daily attendance automatically and carries it all the way to approved payslips, with a self service portal for employees.
+
+| | |
+|---|---|
+| **Works with your devices** | Push (ADMS / iClock) for cloud servers and pull (UDP 4370) for local networks, any number of devices per branch |
+| **Attendance you can trust** | Late, early leave, half day, overtime, night shifts, weekends and holidays calculated from raw punches |
+| **Payroll in minutes** | Salary structures, overtime rules, loans, bonuses and income tax turned into PDF payslips |
+| **Built for teams** | Admin, HR, Branch Manager and Employee roles, approvals, notifications and a full audit log |
 
 ## Features
 
-- **First time setup wizard** for company, country, currency (default Bangladesh, BDT), timezone, main branch, office hours and the admin account.
-- **Multiple branches**, each with its own weekends, holidays, devices and overtime rule.
-- **ZKTeco devices**, any number per branch, in two connection modes:
-  - **Pull**: the server connects to the device on UDP port 4370 and downloads punches every 5 minutes, or when you press "Download Punches Now".
-  - **Push (ADMS / iClock)**: the device sends punches to the server over HTTP. Best for cloud hosting or remote branches.
-  - Test the connection, sync the device time, send employees to the device, restart, clear logs.
-  - Read the users stored on a device and import them as new employees in one click, or link them to existing employees.
-- **Attendance processing** from raw punches: check in and out, worked time, late, early leave, half day, absent, overtime, weekend and holiday work. Night shifts that cross midnight are supported.
-- **Shifts** with grace minutes, half day threshold and break time.
-- **Shift roster**: assign shifts for date ranges to selected employees, a branch or a department, with optional rotation (for example morning and evening every 7 days). Weekly roster view.
-- **Employee documents**: upload NID, CV, contracts and other files to an employee profile, with expiry dates and an Expiring Documents list. Files are stored privately and can be shared with the employee.
-- **Manual attendance and correction requests** with a reason on every change.
-- **Leave management**: leave types with yearly or monthly credit, carry forward, half day, male or female only types (for example maternity), overlap and balance checks, approval flow. Leave that crosses the new year is charged to each year's balance. Approved leave updates attendance automatically.
-- **Leave encashment**: pay unused days of encashable leave types (for example earned leave) as an earning in a payroll month.
-- **Salary structures**: components (Basic, House Rent, Medical, Conveyance, PF and so on) as a % of gross, % of basic or a fixed amount. Salary history with increments.
-- **Overtime rules**: minimum minutes, rounding, daily cap, rate base and multipliers. The default follows the Bangladesh Labour Act (Basic / 208 x 2). A rule can require approval, then only overtime approved by HR or the branch manager is paid.
-- **Payroll** from attendance: absent and unpaid leave deduction, late deduction (for example 3 lates = 1 day), overtime, bonuses and deductions, loan installments, income tax (TDS) with editable Bangladesh tax slabs, pro rata for new joiners and leavers.
-- **Payslips** as PDF, emailed to employees on approval, Excel and CSV export for the bank.
-- **Reports**: daily attendance, monthly summary, monthly attendance sheet, late and early leave, leave balance, all with Excel and CSV export.
-- **Employee portal**: today's punches, monthly attendance, leave apply and cancel, correction requests, payslip download, documents, notices, and editing their own phone and address.
-- **Forgot password**: users reset their password with an email link (mail settings in `.env` are needed).
-- **Notifications** in the app (bell icon) and by email: new leave and correction requests for HR, approval results for employees, payslip ready, and device offline alerts for admins.
-- **Audit log** (admin only): who created, changed or deleted employees, salaries, manual attendance, leave, loans, payroll, settings, devices and users, with old and new values. Logins are recorded too.
-- **Modern interface**: clean dashboard with charts, light and dark mode, Hugeicons, and a layout that works on phones.
-- **Roles**: Admin (everything), HR (everything except settings, branches, devices and users), Branch Manager (dashboard, attendance, leave and corrections of one branch), Employee (portal only).
-- **Leave approval** in one step (manager or HR approves) or two steps (manager recommends, HR gives final approval), chosen in Settings.
+### Organisation
+- First time setup wizard for company, country, currency (Bangladesh and BDT by default), timezone, main branch and the admin account
+- Multiple branches, each with its own weekends, holidays, devices and overtime rule
+- Departments, designations and employee profiles with private document storage and expiry tracking
 
-## Requirements
+### Devices
+- Pull mode downloads punches every 5 minutes or on demand; push mode receives punches in real time
+- Test connection, sync device time, restart, clear logs and send employees to a device
+- Import users stored on a device as employees in one click, or link them to existing employees
+- Unregistered devices that contact the server are listed so they can be added
+- Offline alerts when a device stops responding
 
-- PHP 8.3 or newer with the `sockets`, `pdo_mysql` (or `pdo_sqlite`), `mbstring`, `gd` and `zip` extensions
-- Composer
-- MySQL 8 / MariaDB 10.6, or SQLite for testing
+### Attendance
+- Daily attendance built from punches: check in, check out, worked time, late, early leave, half day and absent
+- Shifts with grace minutes, half day threshold, break time and support for overnight shifts
+- Shift roster with date ranges and rotation for employees, branches or departments
+- Manual attendance with a required reason, and employee correction requests with approval
+- Overtime with rounding, daily caps and optional approval before it is paid
 
-## Installation
+### Leave
+- Leave types with yearly or monthly credit, carry forward, half days and male or female only types
+- Balance and overlap checks, one or two step approval (manager recommends, HR approves)
+- Approved leave updates attendance automatically; leave that crosses the new year is split between years
+- Leave encashment paid through payroll
+
+### Payroll
+- Salary structures from components as a percentage of gross, a percentage of basic or a fixed amount
+- Deductions for absence, unpaid leave and repeated late arrival; overtime at Bangladesh Labour Act rates by default
+- Loans with monthly installments, one time bonuses and deductions, pro rata pay for joiners and leavers
+- Income tax (TDS) with editable Bangladesh tax slabs
+- Draft, approve and paid workflow with editable payslip lines while in draft
+- PDF payslips, email delivery and Excel or CSV bank sheets
+
+### Reports and insight
+- Dashboard with attendance rate, 14 day trend, department check ins, late ranking and payroll trend
+- Daily attendance, monthly summary, monthly attendance sheet and late and early leave reports
+- Excel and CSV export for every report
+
+### People and security
+- Roles: **Admin**, **HR**, **Branch Manager** (one branch only) and **Employee**
+- Employee portal: today's punches, monthly calendar, leave, corrections, payslips, documents and notices
+- In app and email notifications for requests, approvals, payslips and device alerts
+- Audit log of every sensitive change with old and new values, plus logins
+- Password reset by email, light and dark mode, and a layout that works on phones
+
+## Tech stack
+
+| Layer | Technology |
+|---|---|
+| Backend | PHP 8.3+, Laravel 13 |
+| Database | MySQL 8, MariaDB 10.6+ or SQLite (development and tests) |
+| Frontend | Blade, Bootstrap 5, Chart.js, Hugeicons, Inter |
+| Devices | `jmrashed/zkteco` (UDP pull) and a built in ADMS / iClock endpoint (push) |
+| Documents | `barryvdh/laravel-dompdf` for PDF payslips, `openspout/openspout` for Excel |
+| Jobs | Laravel scheduler and database queue |
+
+## Quick start
+
+**Requirements:** PHP 8.3+ with `sockets`, `pdo_mysql`, `mbstring`, `gd`, `zip` and `intl`, Composer, and MySQL or MariaDB.
 
 ```bash
 git clone https://github.com/nayeemdev/zktendance.git
@@ -47,7 +115,7 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-Set the database in `.env`:
+Set your database in `.env`:
 
 ```env
 DB_CONNECTION=mysql
@@ -58,7 +126,7 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-Then:
+Create the tables and start the app:
 
 ```bash
 php artisan migrate
@@ -66,104 +134,111 @@ php artisan storage:link
 php artisan serve
 ```
 
-Open the site and you will be taken to the setup wizard.
+Open `http://localhost:8000` and complete the setup wizard.
 
 ### Demo data
 
-To try the system with sample branches, employees, devices and a month of punches:
+To explore the system with sample branches, employees, devices and a month of punches:
 
 ```bash
 php artisan migrate:fresh --seed
 ```
 
-| Login | Email | Password |
+| Role | Email | Password |
 |---|---|---|
 | Admin | admin@example.com | password |
 | HR | hr@example.com | password |
 | Employee | employee1@example.com | password |
 
-### Production server
+> Do not run the seeder on a live server. It creates users with the password `password`.
 
-Step by step guide for CloudPanel, including SSL, cron, the queue worker and device setup: [docs/deploy-cloudpanel.md](docs/deploy-cloudpanel.md).
+## Connecting ZKTeco devices
+
+Give every employee a **Device User ID** equal to their user ID (PIN) on the device, or import users from the device later.
+
+| | Push (ADMS) | Pull (UDP 4370) |
+|---|---|---|
+| **Best for** | Cloud or VPS servers, remote branches | Servers inside the office network or over VPN |
+| **Typical models** | SpeedFace, ProFace, SenseFace, MB560, UFace800 | K40, MB460, iFace, F18, X628 and most terminals |
+| **Setup** | Register the serial number, then point **Comm > Cloud Server Setting** at your domain | Fixed IP, Comm Key `0`, then **Test Connection** |
+| **Timing** | Real time | Every 5 minutes, or **Download Punches Now** |
+
+Push devices call `https://your-domain/iclock/cdata`. Commands such as sending users, restarting and clearing logs are queued and delivered the next time the device checks in.
 
 ## Background jobs
 
-Add the Laravel scheduler to cron on the server:
+Add the scheduler to cron:
 
 ```cron
 * * * * * cd /path/to/zktendance && php artisan schedule:run >> /dev/null 2>&1
 ```
 
-It runs:
-
-| Command | When | Purpose |
+| Command | Schedule | Purpose |
 |---|---|---|
-| `zk:sync` | every 5 minutes | Download punches from pull mode devices |
-| `attendance:process` | every 15 minutes | Build attendance for yesterday and today |
-| `devices:check` | every 10 minutes | Alert admins when a device stops responding |
-| `leave:allocate` | 1st of every month | Create leave balances with carry forward and add monthly credits |
+| `zk:sync` | Every 5 minutes | Download punches from pull mode devices |
+| `attendance:process` | Every 15 minutes | Build attendance for yesterday and today |
+| `devices:check` | Every 10 minutes | Alert admins when a device stops responding |
+| `leave:allocate` | 1st of each month | Create balances, carry forward and add monthly credits |
 
-Run a queue worker so payslip and notification emails are sent:
+Keep a queue worker running for emails:
 
 ```bash
 php artisan queue:work
 ```
 
-The commands can also be run by hand, for example `php artisan attendance:process 2026-08-01 2026-08-31`.
+Commands can also be run by hand, for example `php artisan attendance:process 2026-08-01 2026-08-31`.
 
-## Connecting ZKTeco devices
+## Payroll workflow
 
-First give every employee a **Device User ID** that matches their user ID (PIN) on the device.
+1. Sync punches and approve pending leave, corrections and overtime
+2. Add one time bonuses or deductions for the month
+3. **Payroll Runs > Run Payroll** to create a draft for all branches or one branch
+4. Review, edit payslip lines or **Regenerate** as needed
+5. **Approve** to record loan installments, publish payslips and email them
+6. **Mark as Paid** after the bank transfer and export the bank sheet
 
-### Pull mode (K40, MB460, iFace, F18, X628 and most terminals)
+Income tax slabs are seeded with the Bangladesh slabs for FY 2026-27. Review them against the current Finance Act in **Settings**.
 
-1. Give the device a fixed IP on the office network, for example `192.168.1.201`.
-2. On the device keep **Comm Key = 0** and UDP port **4370**.
-3. In **ZKTeco Devices > Add Device**, pick the model, select Pull and enter the IP.
-4. Press **Test Connection**, then **Download Punches Now**.
+## Deployment
 
-The server must be able to reach the device, so run it on the office network or connect over a VPN.
+A complete production guide for CloudPanel, covering SSL, cron, the queue worker, push and pull device setup, updates, backups and troubleshooting, is in **[docs/deploy-cloudpanel.md](docs/deploy-cloudpanel.md)**.
 
-### Push mode (SpeedFace, ProFace, SenseFace, MB560, UFace800 and other ADMS devices)
+Updating an existing installation:
 
-1. Add the device in the app with **Push** mode and its **serial number** (System Info > Device Info).
-2. On the device open **Comm. > Cloud Server Setting** and enter your server address and port.
-3. The device calls `https://your-server/iclock/cdata` and uploads punches in real time.
-
-Commands such as sending users, restarting and clearing logs are queued and picked up the next time the device checks in. A device that contacts the server before it is registered is listed on the Devices page so you can add it.
-
-## Payroll flow
-
-1. Make sure punches are synced, corrections and leaves are approved, and every employee has a salary.
-2. Add one time bonuses or deductions in **Bonus & Deductions**.
-3. **Payroll Runs > Run Payroll**, pick the month and optionally a branch. A draft is created.
-4. Review, fix data and **Regenerate** as often as needed. Single payslip lines can also be edited, added or removed on the payslip page while the payroll is a draft (regenerating replaces these edits).
-5. **Approve**. Loan installments are recorded and payslips become visible to employees (and are emailed if enabled in Settings).
-6. **Mark as Paid** after the bank transfer. Use the **Excel** or **CSV** export for the bank sheet.
-
-The income tax slabs are seeded with the Bangladesh slabs for FY 2026-27. Check them against the current Finance Act in **Settings**.
+```bash
+git pull origin main
+composer install --no-dev --optimize-autoloader
+php artisan migrate --force
+php artisan optimize
+php artisan queue:restart
+```
 
 ## Project structure
 
-The code follows a plain Laravel flow: **route > controller > form request > service > model > view**.
+The code follows a plain Laravel flow: **route, controller, form request, service, model, view**.
 
 ```
 app/
-  Http/Controllers/Admin        admin and HR screens
-  Http/Controllers/Portal       employee portal
-  Http/Controllers/AdmsController.php   ZKTeco push endpoint (/iclock/*)
-  Http/Requests                 validation
-  Services                      business logic (attendance, leave, payroll, tax, devices)
-  Services/Device               ZKTeco pull client behind the DeviceClient interface
-  Models
-resources/views                 Blade views with Bootstrap 5
-routes/web.php                  web routes
-routes/adms.php                 device push routes
-routes/console.php              schedule
+├── Http/
+│   ├── Controllers/Admin        Admin, HR and manager screens
+│   ├── Controllers/Portal       Employee portal
+│   ├── Controllers/AdmsController.php   ZKTeco push endpoint (/iclock/*)
+│   └── Requests                 Validation
+├── Services                     Attendance, leave, payroll, tax, devices, reports
+├── Services/Device              ZKTeco pull client behind the DeviceClient interface
+├── Notifications                In app and email notifications
+└── Models
+resources/views                  Blade views
+routes/web.php                   Web routes
+routes/adms.php                  Device push routes
+routes/console.php               Schedule
+docs/                            Deployment guide and images
 ```
 
-## Tests
+## Testing
 
 ```bash
 php artisan test
 ```
+
+The feature suite covers setup, devices (push and pull), attendance rules, leave, roster, overtime, payroll, tax, exports, notifications, roles and every page. GitHub Actions runs it on MySQL and SQLite for each pull request.
