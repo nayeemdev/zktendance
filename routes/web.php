@@ -82,6 +82,9 @@ Route::middleware('auth')->group(function () {
             Route::get('payslips/{payslip}', [Admin\PayslipController::class, 'show'])->name('payslips.show');
             Route::get('payslips/{payslip}/pdf', [Admin\PayslipController::class, 'pdf'])->name('payslips.pdf');
             Route::post('payslips/{payslip}/email', [Admin\PayslipController::class, 'email'])->name('payslips.email');
+            Route::post('payslips/{payslip}/items', [Admin\PayslipItemController::class, 'store'])->name('payslips.items.store');
+            Route::put('payslip-items/{item}', [Admin\PayslipItemController::class, 'update'])->name('payslip-items.update');
+            Route::delete('payslip-items/{item}', [Admin\PayslipItemController::class, 'destroy'])->name('payslip-items.destroy');
 
             Route::get('reports', [Admin\ReportController::class, 'index'])->name('reports.index');
             Route::get('reports/monthly-summary', [Admin\ReportController::class, 'monthlySummary'])->name('reports.monthly-summary');

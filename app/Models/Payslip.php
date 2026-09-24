@@ -24,6 +24,7 @@ class Payslip extends Model
             'total_deductions' => 'float',
             'net_salary' => 'float',
             'emailed_at' => 'datetime',
+            'edited_at' => 'datetime',
         ];
     }
 
