@@ -23,7 +23,8 @@ Office attendance, leave and payroll management for companies using ZKTeco biome
 - **Payroll** from attendance: absent and unpaid leave deduction, late deduction (for example 3 lates = 1 day), overtime, bonuses and deductions, loan installments, income tax (TDS) with editable Bangladesh tax slabs, pro rata for new joiners and leavers.
 - **Payslips** as PDF, emailed to employees on approval, Excel and CSV export for the bank.
 - **Reports**: daily attendance, monthly summary, monthly attendance sheet, late and early leave, leave balance, all with Excel and CSV export.
-- **Employee portal**: today's punches, monthly attendance, leave apply and cancel, correction requests, payslip download, notices.
+- **Employee portal**: today's punches, monthly attendance, leave apply and cancel, correction requests, payslip download, documents, notices, and editing their own phone and address.
+- **Forgot password**: users reset their password with an email link (mail settings in `.env` are needed).
 - **Notifications** in the app (bell icon) and by email: new leave and correction requests for HR, approval results for employees, payslip ready, and device offline alerts for admins.
 - **Audit log** (admin only): who created, changed or deleted employees, salaries, manual attendance, leave, loans, payroll, settings, devices and users, with old and new values. Logins are recorded too.
 - **Roles**: Admin (everything), HR (everything except settings, branches, devices and users), Branch Manager (dashboard, attendance, leave and corrections of one branch), Employee (portal only).

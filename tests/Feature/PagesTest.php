@@ -33,6 +33,8 @@ class PagesTest extends TestCase
             'admin.reports.index', 'admin.reports.monthly-summary', 'admin.reports.monthly-sheet', 'admin.reports.late',
             'admin.notices.index', 'admin.notices.create', 'admin.settings.edit', 'admin.users.index', 'admin.users.create',
             'admin.branches.index', 'admin.branches.create', 'admin.devices.index', 'admin.devices.create', 'profile.edit',
+            'admin.roster.index', 'admin.roster.create', 'admin.overtime.index', 'admin.audit-logs.index', 'admin.leave-encashments.index',
+            'admin.leave-encashments.create', 'admin.documents.index', 'notifications.index',
         ];
 
         foreach ($routes as $route) {
@@ -42,6 +44,7 @@ class PagesTest extends TestCase
         $this->actingAs($admin)->get(route('admin.employees.show', $employee))->assertOk();
         $this->actingAs($admin)->get(route('admin.employees.edit', $employee))->assertOk();
         $this->actingAs($admin)->get(route('admin.devices.show', Device::first()))->assertOk();
+        $this->actingAs($admin)->get(route('admin.devices.users', Device::first()))->assertOk();
         $this->actingAs($admin)->get(route('admin.devices.show', Device::where('connection_mode', 'push')->first()))->assertOk();
         $this->actingAs($admin)->get(route('admin.attendance.edit', Attendance::first()))->assertOk();
         $this->actingAs($admin)->get(route('admin.payroll.show', $run))->assertOk()->assertSee($employee->name);
@@ -58,7 +61,7 @@ class PagesTest extends TestCase
         app(PayrollService::class)->approve($run, $admin);
 
         $user = User::where('email', 'employee1@example.com')->first();
-        foreach (['portal.dashboard', 'portal.attendance', 'portal.leaves.index', 'portal.leaves.create', 'portal.corrections.index', 'portal.corrections.create', 'portal.payslips.index'] as $route) {
+        foreach (['portal.dashboard', 'portal.attendance', 'portal.leaves.index', 'portal.leaves.create', 'portal.corrections.index', 'portal.corrections.create', 'portal.payslips.index', 'portal.documents.index', 'profile.edit', 'notifications.index'] as $route) {
             $this->actingAs($user)->get(route($route))->assertOk();
         }
 

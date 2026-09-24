@@ -10,6 +10,7 @@
             <h1 class="h4 mt-2">{{ setting('company_name') }}</h1>
             <p class="text-muted">Attendance &amp; Payroll</p>
         </div>
+        @include('layouts.partials.alerts')
         <div class="card">
             <div class="card-body p-4">
                 <form method="POST" action="{{ route('login') }}">
@@ -21,6 +22,7 @@
                         <label class="form-check-label" for="remember">Remember me</label>
                     </div>
                     <button class="btn btn-primary w-100">Login</button>
+                    <div class="text-center mt-3"><a href="{{ route('password.request') }}" class="small">Forgot your password?</a></div>
                 </form>
             </div>
         </div>

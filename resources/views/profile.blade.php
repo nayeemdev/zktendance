@@ -18,6 +18,24 @@
                 </dl>
             </div>
         </div>
+
+        <div class="card mt-3">
+            <div class="card-header bg-white fw-semibold">Edit Profile</div>
+            <div class="card-body">
+                <form method="POST" action="{{ route('profile.update') }}">
+                    @csrf
+                    @method('PUT')
+                    @if ($user->employee)
+                        <x-input name="phone" label="Phone" :value="$user->employee->phone" />
+                        <x-textarea name="address" label="Address" :value="$user->employee->address" rows="2" />
+                        <p class="small text-muted">Ask HR to change your name, email, bank or job details.</p>
+                    @else
+                        <x-input name="name" label="Name" :value="$user->name" required />
+                    @endif
+                    <button class="btn btn-primary">Save</button>
+                </form>
+            </div>
+        </div>
     </div>
     <div class="col-md-6">
         <div class="card">
