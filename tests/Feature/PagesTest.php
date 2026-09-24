@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Attendance;
 use App\Models\Device;
 use App\Models\Employee;
+use App\Models\SalaryStructure;
 use App\Models\User;
 use App\Services\PayrollService;
 use Database\Seeders\DemoSeeder;
@@ -49,7 +50,7 @@ class PagesTest extends TestCase
         $this->actingAs($admin)->get(route('admin.attendance.edit', Attendance::first()))->assertOk();
         $this->actingAs($admin)->get(route('admin.payroll.show', $run))->assertOk()->assertSee($employee->name);
         $this->actingAs($admin)->get(route('admin.payslips.show', $run->payslips()->first()))->assertOk();
-        $this->actingAs($admin)->get(route('admin.salary-structures.edit', 1))->assertOk();
+        $this->actingAs($admin)->get(route('admin.salary-structures.edit', SalaryStructure::first()))->assertOk();
         $this->actingAs($admin)->get(route('admin.reports.monthly-summary', ['export' => 'csv']))->assertOk();
     }
 

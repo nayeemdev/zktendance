@@ -25,6 +25,11 @@ class SystemNotification extends Notification implements ShouldQueue
             : ['database'];
     }
 
+    public function viaConnections(): array
+    {
+        return ['database' => 'sync'];
+    }
+
     public function toMail(object $notifiable): MailMessage
     {
         $mail = (new MailMessage)

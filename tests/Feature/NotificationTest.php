@@ -12,6 +12,7 @@ use App\Notifications\SystemNotification;
 use App\Services\SettingService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
@@ -90,5 +91,15 @@ class NotificationTest extends TestCase
         app(SettingService::class)->set(['email_notifications' => false]);
 
         $this->assertSame(['database'], (new SystemNotification('A', 'B'))->via($this->employeeUser));
+    }
+
+    public function test_in_app_notice_is_saved_without_a_queue_worker(): void
+    {
+        config(['queue.default' => 'database']);
+
+        $this->employeeUser->notify(new SystemNotification('Leave approved', 'Your leave was approved.'));
+
+        $this->assertSame(1, $this->employeeUser->notifications()->count());
+        $this->assertSame(1, DB::table('jobs')->count());
     }
 }
