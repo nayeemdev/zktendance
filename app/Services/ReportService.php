@@ -6,6 +6,9 @@ use App\Models\Attendance;
 use App\Models\Employee;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use OpenSpout\Common\Entity\Row;
+use OpenSpout\Common\Entity\Style\Style;
+use OpenSpout\Writer\XLSX\Writer;
 
 class ReportService
 {
@@ -55,6 +58,13 @@ class ReportService
         ];
     }
 
+    public function export(string $baseName, array $header, iterable $rows, ?string $format = 'csv')
+    {
+        return $format === 'xlsx'
+            ? $this->xlsx($baseName.'.xlsx', $header, $rows)
+            : $this->csv($baseName.'.csv', $header, $rows);
+    }
+
     public function csv(string $fileName, array $header, iterable $rows)
     {
         return response()->streamDownload(function () use ($header, $rows) {
@@ -65,5 +75,22 @@ class ReportService
             }
             fclose($out);
         }, $fileName, ['Content-Type' => 'text/csv']);
+    }
+
+    public function xlsx(string $fileName, array $header, iterable $rows)
+    {
+        $path = tempnam(sys_get_temp_dir(), 'xlsx');
+        $writer = new Writer;
+        $writer->openToFile($path);
+        $writer->addRow(Row::fromValuesWithStyle($header, (new Style)->withFontBold(true)));
+
+        foreach ($rows as $row) {
+            $writer->addRow(Row::fromValues(array_map(fn ($value) => $value ?? '', array_values($row))));
+        }
+        $writer->close();
+
+        return response()->download($path, $fileName, [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        ])->deleteFileAfterSend();
     }
 }

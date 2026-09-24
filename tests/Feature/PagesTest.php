@@ -47,7 +47,7 @@ class PagesTest extends TestCase
         $this->actingAs($admin)->get(route('admin.payroll.show', $run))->assertOk()->assertSee($employee->name);
         $this->actingAs($admin)->get(route('admin.payslips.show', $run->payslips()->first()))->assertOk();
         $this->actingAs($admin)->get(route('admin.salary-structures.edit', 1))->assertOk();
-        $this->actingAs($admin)->get(route('admin.reports.monthly-summary', ['export' => 1]))->assertOk();
+        $this->actingAs($admin)->get(route('admin.reports.monthly-summary', ['export' => 'csv']))->assertOk();
     }
 
     public function test_every_portal_page_loads(): void

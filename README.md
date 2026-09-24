@@ -18,8 +18,8 @@ Office attendance, leave and payroll management for companies using ZKTeco biome
 - **Salary structures**: components (Basic, House Rent, Medical, Conveyance, PF and so on) as a % of gross, % of basic or a fixed amount. Salary history with increments.
 - **Overtime rules**: minimum minutes, rounding, daily cap, rate base and multipliers. The default follows the Bangladesh Labour Act (Basic / 208 x 2). A rule can require approval, then only overtime approved by HR or the branch manager is paid.
 - **Payroll** from attendance: absent and unpaid leave deduction, late deduction (for example 3 lates = 1 day), overtime, bonuses and deductions, loan installments, income tax (TDS) with editable Bangladesh tax slabs, pro rata for new joiners and leavers.
-- **Payslips** as PDF, emailed to employees on approval, CSV export for the bank.
-- **Reports**: daily attendance, monthly summary, monthly attendance sheet, late and early leave, leave balance, all with CSV export.
+- **Payslips** as PDF, emailed to employees on approval, Excel and CSV export for the bank.
+- **Reports**: daily attendance, monthly summary, monthly attendance sheet, late and early leave, leave balance, all with Excel and CSV export.
 - **Employee portal**: today's punches, monthly attendance, leave apply and cancel, correction requests, payslip download, notices.
 - **Notifications** in the app (bell icon) and by email: new leave and correction requests for HR, approval results for employees, payslip ready, and device offline alerts for admins.
 - **Audit log** (admin only): who created, changed or deleted employees, salaries, manual attendance, leave, loans, payroll, settings, devices and users, with old and new values. Logins are recorded too.
@@ -130,7 +130,7 @@ Commands such as sending users, restarting and clearing logs are queued and pick
 3. **Payroll Runs > Run Payroll**, pick the month and optionally a branch. A draft is created.
 4. Review, fix data and **Regenerate** as often as needed. Single payslip lines can also be edited, added or removed on the payslip page while the payroll is a draft (regenerating replaces these edits).
 5. **Approve**. Loan installments are recorded and payslips become visible to employees (and are emailed if enabled in Settings).
-6. **Mark as Paid** after the bank transfer. Use **Export CSV** for the bank sheet.
+6. **Mark as Paid** after the bank transfer. Use the **Excel** or **CSV** export for the bank sheet.
 
 The income tax slabs are seeded with the Bangladesh slabs for FY 2026-27. Check them against the current Finance Act in **Settings**.
 

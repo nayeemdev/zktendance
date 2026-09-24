@@ -78,7 +78,7 @@ class PayrollRunController extends Controller
         return back()->with('success', "{$count} payslips queued for email.");
     }
 
-    public function export(PayrollRun $payroll, ReportService $reports)
+    public function export(Request $request, PayrollRun $payroll, ReportService $reports)
     {
         $payslips = $payroll->payslips()->with(['employee.department', 'items'])->get()->sortBy('employee.employee_code');
 
@@ -99,10 +99,11 @@ class PayrollRunController extends Controller
             $p->employee->bank_account_no,
         ]);
 
-        return $reports->csv(
-            'payroll-'.$payroll->month->format('Y-m').'.csv',
+        return $reports->export(
+            'payroll-'.$payroll->month->format('Y-m'),
             ['Code', 'Name', 'Department', 'Present', 'Absent', 'Paid Leave', 'Unpaid Leave', 'Late', 'OT Hours', 'Earnings', 'Deductions', 'Net Pay', 'Bank', 'Account No'],
-            $rows
+            $rows,
+            $request->query('format')
         );
     }
 
