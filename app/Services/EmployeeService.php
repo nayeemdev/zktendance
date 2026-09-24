@@ -17,7 +17,7 @@ class EmployeeService
     public function create(array $data): Employee
     {
         $employee = DB::transaction(function () use ($data) {
-            $employee = Employee::create(Arr::except($data, ['password', 'create_login']));
+            $employee = Employee::create(Arr::except($data, ['password', 'create_login', 'login_role']));
             $this->syncLogin($employee, $data);
 
             return $employee;
@@ -32,7 +32,7 @@ class EmployeeService
     public function update(Employee $employee, array $data): Employee
     {
         DB::transaction(function () use ($employee, $data) {
-            $employee->update(Arr::except($data, ['password', 'create_login']));
+            $employee->update(Arr::except($data, ['password', 'create_login', 'login_role']));
             $this->syncLogin($employee, $data);
         });
 
@@ -49,11 +49,17 @@ class EmployeeService
             return;
         }
 
+        $manager = ($data['login_role'] ?? null) === User::ROLE_MANAGER;
         $attributes = [
             'name' => $employee->name,
             'email' => $employee->email,
             'is_active' => $employee->status === 'active',
         ];
+
+        if (! $user || ! $user->isStaff()) {
+            $attributes['role'] = $manager ? User::ROLE_MANAGER : User::ROLE_EMPLOYEE;
+            $attributes['branch_id'] = $manager ? $employee->branch_id : null;
+        }
 
         if (! empty($data['password'])) {
             $attributes['password'] = $data['password'];
@@ -66,7 +72,6 @@ class EmployeeService
         }
 
         $user = User::create($attributes + [
-            'role' => User::ROLE_EMPLOYEE,
             'password' => $data['password'] ?? str()->random(16),
         ]);
         $employee->update(['user_id' => $user->id]);

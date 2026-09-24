@@ -16,6 +16,15 @@ class NotificationService
         Notification::send($users, new SystemNotification($title, $message, $url));
     }
 
+    public function branchManagers(int $branchId, string $title, string $message, ?string $url = null): int
+    {
+        $users = User::where('role', User::ROLE_MANAGER)->where('branch_id', $branchId)->where('is_active', true)->get();
+
+        Notification::send($users, new SystemNotification($title, $message, $url));
+
+        return $users->count();
+    }
+
     public function employee(Employee $employee, string $title, string $message, ?string $url = null, bool $sendMail = true): void
     {
         if ($employee->user && $employee->user->is_active) {

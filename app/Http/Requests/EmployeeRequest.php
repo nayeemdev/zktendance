@@ -35,6 +35,7 @@ class EmployeeRequest extends FormRequest
             'bank_account_no' => ['nullable', 'string', 'max:50'],
             'tax_enabled' => ['boolean'],
             'create_login' => ['boolean'],
+            'login_role' => ['nullable', 'in:employee,manager'],
             'password' => ['nullable', 'string', 'min:8'],
         ];
     }

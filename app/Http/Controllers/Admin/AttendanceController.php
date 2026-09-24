@@ -20,6 +20,9 @@ class AttendanceController extends Controller
     public function index(Request $request)
     {
         $date = Carbon::parse($request->input('date', today()->toDateString()));
+        if ($branchId = $request->user()->managedBranchId()) {
+            $request->merge(['branch_id' => $branchId]);
+        }
 
         $attendances = Attendance::with(['employee.branch', 'employee.department', 'shift'])
             ->whereDate('date', $date)
@@ -33,7 +36,7 @@ class AttendanceController extends Controller
         return view('admin.attendance.index', [
             'date' => $date,
             'attendances' => $attendances,
-            'branches' => Branch::pluck('name', 'id'),
+            'branches' => Branch::when($request->user()->managedBranchId(), fn ($q, $id) => $q->whereKey($id))->pluck('name', 'id'),
             'departments' => Department::pluck('name', 'id'),
             'summary' => $attendances->countBy('status'),
         ]);

@@ -33,6 +33,17 @@
         ],
     ];
 
+    if (auth()->user()->isManager()) {
+        $menu = [
+            'Branch' => [
+                ['admin.dashboard', 'speedometer2', 'Dashboard', 'admin.dashboard'],
+                ['admin.attendance.index', 'calendar-check', 'Daily Attendance', 'admin.attendance.*'],
+                ['admin.leaves.index', 'calendar-x', 'Leave Requests', 'admin.leaves.*'],
+                ['admin.corrections.index', 'pencil-square', 'Corrections', 'admin.corrections.*'],
+            ],
+        ];
+    }
+
     if (auth()->user()->isAdmin()) {
         $menu['Administration'] = [
             ['admin.branches.index', 'building', 'Branches', 'admin.branches.*'],
