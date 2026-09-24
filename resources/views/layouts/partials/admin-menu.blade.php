@@ -3,6 +3,7 @@
         'Main' => [
             ['admin.dashboard', 'speedometer2', 'Dashboard', 'admin.dashboard'],
             ['admin.employees.index', 'people', 'Employees', 'admin.employees.*'],
+            ['admin.documents.index', 'folder2-open', 'Expiring Documents', 'admin.documents.*'],
         ],
         'Attendance' => [
             ['admin.attendance.index', 'calendar-check', 'Daily Attendance', 'admin.attendance.*'],

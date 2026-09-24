@@ -6,6 +6,7 @@
         ['portal.leaves.index', 'calendar-plus', 'My Leaves', 'portal.leaves.*'],
         ['portal.corrections.index', 'pencil', 'Attendance Corrections', 'portal.corrections.*'],
         ['portal.payslips.index', 'receipt', 'My Payslips', 'portal.payslips.*'],
+        ['portal.documents.index', 'folder2-open', 'My Documents', 'portal.documents.*'],
     ] as [$route, $icon, $label, $pattern])
         <li class="nav-item">
             <a href="{{ route($route) }}" class="nav-link {{ request()->routeIs($pattern) ? 'active' : '' }}">

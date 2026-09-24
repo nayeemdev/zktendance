@@ -42,6 +42,10 @@ Route::middleware('auth')->group(function () {
             Route::resource('employees', Admin\EmployeeController::class);
             Route::post('employees/{employee}/salaries', [Admin\EmployeeSalaryController::class, 'store'])->name('employees.salaries.store');
             Route::delete('salaries/{salary}', [Admin\EmployeeSalaryController::class, 'destroy'])->name('salaries.destroy');
+            Route::get('documents', [Admin\EmployeeDocumentController::class, 'index'])->name('documents.index');
+            Route::post('employees/{employee}/documents', [Admin\EmployeeDocumentController::class, 'store'])->name('employees.documents.store');
+            Route::get('documents/{document}', [Admin\EmployeeDocumentController::class, 'download'])->name('documents.download');
+            Route::delete('documents/{document}', [Admin\EmployeeDocumentController::class, 'destroy'])->name('documents.destroy');
             Route::resource('departments', Admin\DepartmentController::class)->except('show');
             Route::resource('designations', Admin\DesignationController::class)->except('show');
             Route::resource('shifts', Admin\ShiftController::class)->except('show');
@@ -130,5 +134,7 @@ Route::middleware('auth')->group(function () {
         Route::get('payslips', [Portal\PayslipController::class, 'index'])->name('payslips.index');
         Route::get('payslips/{payslip}', [Portal\PayslipController::class, 'show'])->name('payslips.show');
         Route::get('payslips/{payslip}/pdf', [Portal\PayslipController::class, 'pdf'])->name('payslips.pdf');
+        Route::get('documents', [Portal\DocumentController::class, 'index'])->name('documents.index');
+        Route::get('documents/{document}', [Portal\DocumentController::class, 'download'])->name('documents.download');
     });
 });

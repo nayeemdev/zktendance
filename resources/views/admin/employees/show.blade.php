@@ -84,6 +84,42 @@
             </div>
         </div>
 
+        <div class="card mb-3">
+            <div class="card-header bg-white fw-semibold">Documents</div>
+            <div class="table-responsive">
+                <table class="table table-sm mb-0">
+                    <tbody>
+                    @forelse ($employee->documents as $document)
+                        <tr>
+                            <td><a href="{{ route('admin.documents.download', $document) }}"><i class="bi bi-file-earmark"></i> {{ $document->title }}</a><div class="small text-muted">{{ $document->original_name }} &middot; {{ number_format($document->size / 1024) }} KB</div></td>
+                            <td class="small">
+                                @if ($document->expires_on)
+                                    <span class="badge text-bg-{{ $document->isExpired() ? 'danger' : ($document->expiresSoon() ? 'warning' : 'light') }}">{{ $document->isExpired() ? 'Expired' : 'Expires' }} {{ $document->expires_on->format('d M Y') }}</span>
+                                @endif
+                                @unless ($document->visible_to_employee)<span class="badge text-bg-secondary">HR only</span>@endunless
+                            </td>
+                            <td class="small text-muted">{{ $document->uploader?->name }}</td>
+                            <td class="text-end"><x-delete-button :action="route('admin.documents.destroy', $document)" message="Delete this document?" /></td>
+                        </tr>
+                    @empty
+                        <tr><td class="text-muted">No documents.</td></tr>
+                    @endforelse
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-body border-top">
+                <form method="POST" action="{{ route('admin.employees.documents.store', $employee) }}" enctype="multipart/form-data" class="row g-2 align-items-end">
+                    @csrf
+                    <x-input name="title" label="Title" placeholder="NID, CV, Contract" class="col-md-3" required />
+                    <x-input name="file" type="file" label="File" class="col-md-4" required />
+                    <x-input name="expires_on" type="date" label="Expires On" class="col-md-2" />
+                    <div class="col-md-3"><button class="btn btn-primary w-100">Upload</button></div>
+                    <x-checkbox name="visible_to_employee" label="Employee can see this document" :checked="true" class="col-12 mt-2" />
+                </form>
+                <div class="form-text">PDF, image, Word or Excel, up to 5 MB.</div>
+            </div>
+        </div>
+
         <div class="card">
             <div class="card-header bg-white fw-semibold">Recent Attendance</div>
             <div class="table-responsive">

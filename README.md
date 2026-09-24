@@ -14,6 +14,7 @@ Office attendance, leave and payroll management for companies using ZKTeco biome
 - **Attendance processing** from raw punches: check in and out, worked time, late, early leave, half day, absent, overtime, weekend and holiday work. Night shifts that cross midnight are supported.
 - **Shifts** with grace minutes, half day threshold and break time.
 - **Shift roster**: assign shifts for date ranges to selected employees, a branch or a department, with optional rotation (for example morning and evening every 7 days). Weekly roster view.
+- **Employee documents**: upload NID, CV, contracts and other files to an employee profile, with expiry dates and an Expiring Documents list. Files are stored privately and can be shared with the employee.
 - **Manual attendance and correction requests** with a reason on every change.
 - **Leave management**: leave types with yearly or monthly credit, carry forward, half day, male or female only types (for example maternity), overlap and balance checks, approval flow. Leave that crosses the new year is charged to each year's balance. Approved leave updates attendance automatically.
 - **Leave encashment**: pay unused days of encashable leave types (for example earned leave) as an earning in a payroll month.
