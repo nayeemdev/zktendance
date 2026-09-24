@@ -69,6 +69,7 @@ class SetupService
                 'tax_enabled' => $data['country'] === 'BD',
                 'setup_completed' => true,
             ]);
+            $this->settings->applyTimezone();
 
             return $admin;
         });

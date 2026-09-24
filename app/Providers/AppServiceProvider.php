@@ -34,11 +34,7 @@ class AppServiceProvider extends ServiceProvider
         ]));
 
         try {
-            $timezone = $this->app->make(SettingService::class)->get('timezone');
-            if ($timezone) {
-                config(['app.timezone' => $timezone]);
-                date_default_timezone_set($timezone);
-            }
+            $this->app->make(SettingService::class)->applyTimezone();
         } catch (Throwable) {
         }
     }
