@@ -46,7 +46,7 @@
                                             <div class="modal-body">
                                                 <x-input name="allocated" type="number" step="0.5" label="Allocated" :value="$balance->allocated" :id="'a'.$balance->id" />
                                                 <x-input name="carried_forward" type="number" step="0.5" label="Carried Forward" :value="$balance->carried_forward" :id="'c'.$balance->id" />
-                                                <div class="small text-muted">Used: {{ $balance->used }}</div>
+                                                <div class="small text-muted">Used: {{ $balance->used }} &middot; Encashed: {{ $balance->encashed }}</div>
                                             </div>
                                             <div class="modal-footer"><button class="btn btn-primary btn-sm">Save</button></div>
                                         </form>

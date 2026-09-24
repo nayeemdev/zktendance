@@ -15,7 +15,7 @@ class LeaveTypeController extends Controller
 
     public function create()
     {
-        return view('admin.leave-types.form', ['leaveType' => new LeaveType(['is_paid' => true, 'allow_half_day' => true, 'is_active' => true])]);
+        return view('admin.leave-types.form', ['leaveType' => new LeaveType(['is_paid' => true, 'allow_half_day' => true, 'is_active' => true, 'accrual' => 'yearly'])]);
     }
 
     public function store(LeaveTypeRequest $request)

@@ -17,6 +17,7 @@
             ['admin.leaves.index', 'calendar-x', 'Leave Requests', 'admin.leaves.*'],
             ['admin.leave-balances.index', 'bar-chart', 'Leave Balances', 'admin.leave-balances.*'],
             ['admin.leave-types.index', 'tags', 'Leave Types', 'admin.leave-types.*'],
+            ['admin.leave-encashments.index', 'cash-coin', 'Leave Encashment', 'admin.leave-encashments.*'],
         ],
         'Payroll' => [
             ['admin.payroll.index', 'cash-stack', 'Payroll Runs', 'admin.payroll.*'],

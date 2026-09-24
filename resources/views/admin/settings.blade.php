@@ -38,6 +38,7 @@
                 <div class="card-body row">
                     <x-select name="salary_day_basis" label="Per Day Salary" :options="['calendar' => 'Salary / days in month', '30' => 'Salary / 30']" :value="$settings['salary_day_basis']" class="col-md-6 mb-3" required />
                     <x-select name="absent_deduction_base" label="Absent Deduction Based On" :options="['gross' => 'Gross Salary', 'basic' => 'Basic Salary']" :value="$settings['absent_deduction_base']" class="col-md-6 mb-3" required />
+                    <x-select name="encashment_base" label="Leave Encashment Rate" :options="['basic' => 'Basic salary / 30 per day', 'gross' => 'Gross salary / 30 per day']" :value="$settings['encashment_base']" class="col-md-12 mb-3" required />
                     <x-select name="leave_approval_levels" label="Leave Approval" :options="[1 => 'One step: manager or HR approves', 2 => 'Two steps: manager recommends, HR approves']" :value="$settings['leave_approval_levels']" class="col-md-12 mb-3" required />
                     <x-input name="late_days_per_deduction" type="number" label="Late days for 1 day deduction" :value="$settings['late_days_per_deduction']" class="col-md-6 mb-3" required help="0 turns it off. 3 means every 3 lates cut 1 day." />
                     <x-input name="payslip_footer" label="Payslip Footer" :value="$settings['payslip_footer']" class="col-md-6 mb-3" />

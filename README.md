@@ -14,7 +14,8 @@ Office attendance, leave and payroll management for companies using ZKTeco biome
 - **Shifts** with grace minutes, half day threshold and break time.
 - **Shift roster**: assign shifts for date ranges to selected employees, a branch or a department, with optional rotation (for example morning and evening every 7 days). Weekly roster view.
 - **Manual attendance and correction requests** with a reason on every change.
-- **Leave management**: leave types, yearly balances, carry forward, half day, overlap and balance checks, approval flow. Approved leave updates attendance automatically.
+- **Leave management**: leave types with yearly or monthly credit, carry forward, half day, male or female only types (for example maternity), overlap and balance checks, approval flow. Leave that crosses the new year is charged to each year's balance. Approved leave updates attendance automatically.
+- **Leave encashment**: pay unused days of encashable leave types (for example earned leave) as an earning in a payroll month.
 - **Salary structures**: components (Basic, House Rent, Medical, Conveyance, PF and so on) as a % of gross, % of basic or a fixed amount. Salary history with increments.
 - **Overtime rules**: minimum minutes, rounding, daily cap, rate base and multipliers. The default follows the Bangladesh Labour Act (Basic / 208 x 2). A rule can require approval, then only overtime approved by HR or the branch manager is paid.
 - **Payroll** from attendance: absent and unpaid leave deduction, late deduction (for example 3 lates = 1 day), overtime, bonuses and deductions, loan installments, income tax (TDS) with editable Bangladesh tax slabs, pro rata for new joiners and leavers.
@@ -92,7 +93,7 @@ It runs:
 | `zk:sync` | every 5 minutes | Download punches from pull mode devices |
 | `attendance:process` | every 15 minutes | Build attendance for yesterday and today |
 | `devices:check` | every 10 minutes | Alert admins when a device stops responding |
-| `leave:allocate` | 1 January | Create the new year's leave balances with carry forward |
+| `leave:allocate` | 1st of every month | Create leave balances with carry forward and add monthly credits |
 
 Run a queue worker so payslip and notification emails are sent:
 
