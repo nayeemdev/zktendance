@@ -4,7 +4,7 @@
 
 @section('content')
 <x-page-header subtitle="Payroll uses processed attendance, leave, overtime, loans, bonus and tax for the month.">
-    <a href="{{ route('admin.payroll.create') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Run Payroll</a>
+    <a href="{{ route('admin.payroll.create') }}" class="btn btn-primary"><i class="hgi-stroke hgi-add-01"></i> Run Payroll</a>
 </x-page-header>
 
 <div class="card">

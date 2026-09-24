@@ -8,7 +8,7 @@
         <input type="month" name="month" value="{{ $month->format('Y-m') }}" class="form-control">
         <button class="btn btn-outline-secondary">Show</button>
     </form>
-    <a href="{{ route('admin.adjustments.create') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add</a>
+    <a href="{{ route('admin.adjustments.create') }}" class="btn btn-primary"><i class="hgi-stroke hgi-add-01"></i> Add</a>
 </x-page-header>
 
 <div class="card col-lg-10">

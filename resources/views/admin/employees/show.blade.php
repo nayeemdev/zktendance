@@ -4,8 +4,8 @@
 
 @section('content')
 <x-page-header :title="$employee->name" :subtitle="$employee->employee_code.' · '.($employee->designation?->name ?? 'No designation').' · '.$employee->branch->name">
-    <a href="{{ route('admin.attendance.create', ['employee_id' => $employee->id]) }}" class="btn btn-outline-secondary"><i class="bi bi-calendar-plus"></i> Manual Attendance</a>
-    <a href="{{ route('admin.employees.edit', $employee) }}" class="btn btn-primary"><i class="bi bi-pencil"></i> Edit</a>
+    <a href="{{ route('admin.attendance.create', ['employee_id' => $employee->id]) }}" class="btn btn-outline-secondary"><i class="hgi-stroke hgi-calendar-add-01"></i> Manual Attendance</a>
+    <a href="{{ route('admin.employees.edit', $employee) }}" class="btn btn-primary"><i class="hgi-stroke hgi-edit-02"></i> Edit</a>
     <x-delete-button :action="route('admin.employees.destroy', $employee)" message="Delete this employee and all attendance, leave and payslip records?" label="Delete" />
 </x-page-header>
 
@@ -91,7 +91,7 @@
                     <tbody>
                     @forelse ($employee->documents as $document)
                         <tr>
-                            <td><a href="{{ route('admin.documents.download', $document) }}"><i class="bi bi-file-earmark"></i> {{ $document->title }}</a><div class="small text-muted">{{ $document->original_name }} &middot; {{ number_format($document->size / 1024) }} KB</div></td>
+                            <td><a href="{{ route('admin.documents.download', $document) }}"><i class="hgi-stroke hgi-file-01"></i> {{ $document->title }}</a><div class="small text-muted">{{ $document->original_name }} &middot; {{ number_format($document->size / 1024) }} KB</div></td>
                             <td class="small">
                                 @if ($document->expires_on)
                                     <span class="badge text-bg-{{ $document->isExpired() ? 'danger' : ($document->expiresSoon() ? 'warning' : 'light') }}">{{ $document->isExpired() ? 'Expired' : 'Expires' }} {{ $document->expires_on->format('d M Y') }}</span>

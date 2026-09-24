@@ -4,7 +4,7 @@
 
 @section('content')
 <x-page-header subtitle="Each branch can have its own weekends, holidays, devices and overtime rule.">
-    <a href="{{ route('admin.branches.create') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add Branch</a>
+    <a href="{{ route('admin.branches.create') }}" class="btn btn-primary"><i class="hgi-stroke hgi-add-01"></i> Add Branch</a>
 </x-page-header>
 
 <div class="card">
@@ -21,7 +21,7 @@
                     <td>{{ $branch->devices_count }}</td>
                     <td><x-badge :status="$branch->is_active ? 'active' : 'paused'" /></td>
                     <td class="text-end text-nowrap">
-                        <a href="{{ route('admin.branches.edit', $branch) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a>
+                        <a href="{{ route('admin.branches.edit', $branch) }}" class="btn btn-sm btn-outline-secondary"><i class="hgi-stroke hgi-edit-02"></i></a>
                         <x-delete-button :action="route('admin.branches.destroy', $branch)" />
                     </td>
                 </tr>

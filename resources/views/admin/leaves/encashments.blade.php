@@ -4,7 +4,7 @@
 
 @section('content')
 <x-page-header subtitle="Unused leave days paid as an earning in the selected payroll month.">
-    <a href="{{ route('admin.leave-encashments.create') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Encash Leave</a>
+    <a href="{{ route('admin.leave-encashments.create') }}" class="btn btn-primary"><i class="hgi-stroke hgi-add-01"></i> Encash Leave</a>
 </x-page-header>
 
 <div class="card">

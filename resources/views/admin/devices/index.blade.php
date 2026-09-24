@@ -4,7 +4,7 @@
 
 @section('content')
 <x-page-header subtitle="Pull devices are read by the server every 5 minutes. Push devices send punches to the server themselves.">
-    <a href="{{ route('admin.devices.create') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add Device</a>
+    <a href="{{ route('admin.devices.create') }}" class="btn btn-primary"><i class="hgi-stroke hgi-add-01"></i> Add Device</a>
 </x-page-header>
 
 @if (! empty($unknown))

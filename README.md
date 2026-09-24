@@ -27,6 +27,7 @@ Office attendance, leave and payroll management for companies using ZKTeco biome
 - **Forgot password**: users reset their password with an email link (mail settings in `.env` are needed).
 - **Notifications** in the app (bell icon) and by email: new leave and correction requests for HR, approval results for employees, payslip ready, and device offline alerts for admins.
 - **Audit log** (admin only): who created, changed or deleted employees, salaries, manual attendance, leave, loans, payroll, settings, devices and users, with old and new values. Logins are recorded too.
+- **Modern interface**: clean dashboard with charts, light and dark mode, Hugeicons, and a layout that works on phones.
 - **Roles**: Admin (everything), HR (everything except settings, branches, devices and users), Branch Manager (dashboard, attendance, leave and corrections of one branch), Employee (portal only).
 - **Leave approval** in one step (manager or HR approves) or two steps (manager recommends, HR gives final approval), chosen in Settings.
 

@@ -4,7 +4,7 @@
 
 @section('content')
 <x-page-header subtitle="Employees without a shift use the default shift. Night shifts that end after midnight are supported.">
-    <a href="{{ route('admin.shifts.create') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add Shift</a>
+    <a href="{{ route('admin.shifts.create') }}" class="btn btn-primary"><i class="hgi-stroke hgi-add-01"></i> Add Shift</a>
 </x-page-header>
 
 <div class="card">
@@ -21,7 +21,7 @@
                     <td>{{ minutes_to_hours($shift->half_day_minutes) }} hrs</td>
                     <td>{{ $shift->break_minutes }} min</td>
                     <td class="text-end text-nowrap">
-                        <a href="{{ route('admin.shifts.edit', $shift) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a>
+                        <a href="{{ route('admin.shifts.edit', $shift) }}" class="btn btn-sm btn-outline-secondary"><i class="hgi-stroke hgi-edit-02"></i></a>
                         <x-delete-button :action="route('admin.shifts.destroy', $shift)" />
                     </td>
                 </tr>

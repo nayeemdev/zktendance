@@ -22,8 +22,8 @@
         @endforeach
     </div>
     <div class="d-flex gap-2">
-        <a href="{{ route('admin.attendance.create', ['date' => $date->toDateString()]) }}" class="btn btn-outline-primary"><i class="bi bi-plus-lg"></i> Manual Entry</a>
-        <button class="btn btn-outline-secondary" data-bs-toggle="collapse" data-bs-target="#processBox"><i class="bi bi-arrow-repeat"></i> Reprocess</button>
+        <a href="{{ route('admin.attendance.create', ['date' => $date->toDateString()]) }}" class="btn btn-outline-primary"><i class="hgi-stroke hgi-add-01"></i> Manual Entry</a>
+        <button class="btn btn-outline-secondary" data-bs-toggle="collapse" data-bs-target="#processBox"><i class="hgi-stroke hgi-refresh"></i> Reprocess</button>
     </div>
 </div>
 
@@ -57,11 +57,11 @@
                     <td>{{ $row->late_minutes ? $row->late_minutes.'m' : '-' }}</td>
                     <td>{{ $row->early_leave_minutes ? $row->early_leave_minutes.'m' : '-' }}</td>
                     <td>{{ $row->overtime_minutes ? minutes_to_hours($row->overtime_minutes) : '-' }}@if($row->overtime_status)<div><x-badge :status="$row->overtime_status" /></div>@endif</td>
-                    <td><x-status :attendance="$row" /> @if($row->note)<i class="bi bi-info-circle text-muted" title="{{ $row->note }}"></i>@endif</td>
+                    <td><x-status :attendance="$row" /> @if($row->note)<i class="hgi-stroke hgi-information-circle text-muted" title="{{ $row->note }}"></i>@endif</td>
                     <td class="text-end text-nowrap">
-                        <a href="{{ route('admin.attendance.edit', $row) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a>
+                        <a href="{{ route('admin.attendance.edit', $row) }}" class="btn btn-sm btn-outline-secondary"><i class="hgi-stroke hgi-edit-02"></i></a>
                         @if ($row->is_manual)
-                            <x-post-button :action="route('admin.attendance.reset', $row)" label="" icon="arrow-counterclockwise" style="outline-warning" confirm="Discard the manual change and recalculate from punches?" />
+                            <x-post-button :action="route('admin.attendance.reset', $row)" label="" icon="arrow-turn-backward" style="outline-warning" confirm="Discard the manual change and recalculate from punches?" />
                         @endif
                     </td>
                 </tr>

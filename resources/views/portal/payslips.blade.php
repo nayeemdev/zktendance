@@ -16,8 +16,8 @@
                     <td class="text-end fw-semibold">{{ money($payslip->net_salary) }}</td>
                     <td><x-badge :status="$payslip->payrollRun->status" /></td>
                     <td class="text-end text-nowrap">
-                        <a href="{{ route('portal.payslips.show', $payslip) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-eye"></i></a>
-                        <a href="{{ route('portal.payslips.pdf', $payslip) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-file-pdf"></i></a>
+                        <a href="{{ route('portal.payslips.show', $payslip) }}" class="btn btn-sm btn-outline-secondary"><i class="hgi-stroke hgi-view"></i></a>
+                        <a href="{{ route('portal.payslips.pdf', $payslip) }}" class="btn btn-sm btn-outline-secondary"><i class="hgi-stroke hgi-pdf-02"></i></a>
                     </td>
                 </tr>
             @empty

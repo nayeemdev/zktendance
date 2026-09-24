@@ -4,7 +4,7 @@
 
 @section('content')
 <x-page-header>
-    <a href="{{ route('admin.leave-types.create') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add Leave Type</a>
+    <a href="{{ route('admin.leave-types.create') }}" class="btn btn-primary"><i class="hgi-stroke hgi-add-01"></i> Add Leave Type</a>
 </x-page-header>
 
 <div class="card">
@@ -24,7 +24,7 @@
                     <td>{{ $type->allow_half_day ? 'Yes' : 'No' }}</td>
                     <td><x-badge :status="$type->is_active ? 'active' : 'paused'" /></td>
                     <td class="text-end text-nowrap">
-                        <a href="{{ route('admin.leave-types.edit', $type) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a>
+                        <a href="{{ route('admin.leave-types.edit', $type) }}" class="btn btn-sm btn-outline-secondary"><i class="hgi-stroke hgi-edit-02"></i></a>
                         @if ($type->is_active)
                             <x-delete-button :action="route('admin.leave-types.destroy', $type)" message="Disable this leave type?" />
                         @endif

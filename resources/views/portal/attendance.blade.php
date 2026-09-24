@@ -8,7 +8,7 @@
         <input type="month" name="month" value="{{ $month->format('Y-m') }}" class="form-control">
         <button class="btn btn-outline-secondary">Show</button>
     </form>
-    <a href="{{ route('portal.corrections.create') }}" class="btn btn-primary"><i class="bi bi-pencil"></i> Request Correction</a>
+    <a href="{{ route('portal.corrections.create') }}" class="btn btn-primary"><i class="hgi-stroke hgi-edit-02"></i> Request Correction</a>
 </x-page-header>
 
 <div class="d-flex flex-wrap gap-2 mb-3">

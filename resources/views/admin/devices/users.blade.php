@@ -4,7 +4,7 @@
 
 @section('content')
 <x-page-header :subtitle="$users->count().' users stored for this device'">
-    <x-post-button :action="route('admin.devices.users.refresh', $device)" :label="$device->isPush() ? 'Ask Device to Upload Users' : 'Read Users from Device'" icon="arrow-repeat" />
+    <x-post-button :action="route('admin.devices.users.refresh', $device)" :label="$device->isPush() ? 'Ask Device to Upload Users' : 'Read Users from Device'" icon="refresh" />
     <a href="{{ route('admin.devices.show', $device) }}" class="btn btn-light">Back</a>
 </x-page-header>
 
@@ -64,7 +64,7 @@
 </div>
 
 @if ($users->contains(fn ($u) => ! $u->employee))
-    <button class="btn btn-primary mt-3" form="importForm"><i class="bi bi-person-plus"></i> Import Selected as New Employees</button>
+    <button class="btn btn-primary mt-3" form="importForm"><i class="hgi-stroke hgi-user-add-01"></i> Import Selected as New Employees</button>
     <div class="form-text">New employees join the {{ $device->branch->name }} branch with today's joining date. Complete their details and salary afterwards.</div>
 @endif
 @endsection

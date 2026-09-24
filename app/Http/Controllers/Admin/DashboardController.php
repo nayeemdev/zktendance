@@ -19,7 +19,7 @@ class DashboardController extends Controller
         return view('admin.dashboard', [
             'stats' => $dashboard->adminStats($branchId),
             'branches' => Branch::when($request->user()->managedBranchId(), fn ($q, $id) => $q->whereKey($id))->pluck('name', 'id'),
-            'recentPunches' => AttendanceLog::with(['employee', 'device'])->tap($inBranch)->latest('punched_at')->limit(10)->get(),
+            'recentPunches' => AttendanceLog::with(['employee', 'device'])->tap($inBranch)->latest('punched_at')->limit(6)->get(),
             'onLeaveToday' => LeaveRequest::with(['employee', 'leaveType'])->tap($inBranch)
                 ->where('status', 'approved')
                 ->whereDate('start_date', '<=', today())

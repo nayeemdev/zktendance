@@ -4,7 +4,7 @@
 
 @section('content')
 <x-page-header subtitle="Admins manage everything. HR users manage employees, attendance, leave and payroll but not settings or devices. Branch managers see their branch and approve its leave and corrections. Employee logins are created from the employee profile.">
-    <a href="{{ route('admin.users.create') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add User</a>
+    <a href="{{ route('admin.users.create') }}" class="btn btn-primary"><i class="hgi-stroke hgi-add-01"></i> Add User</a>
 </x-page-header>
 
 <div class="card col-lg-9">
@@ -19,7 +19,7 @@
                     <td>{{ \App\Models\User::ROLES[$user->role] }}@if($user->branch)<div class="small text-muted">{{ $user->branch->name }}</div>@endif</td>
                     <td><x-badge :status="$user->is_active ? 'active' : 'paused'" /></td>
                     <td class="text-end text-nowrap">
-                        <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a>
+                        <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-sm btn-outline-secondary"><i class="hgi-stroke hgi-edit-02"></i></a>
                         <x-delete-button :action="route('admin.users.destroy', $user)" />
                     </td>
                 </tr>

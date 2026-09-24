@@ -4,7 +4,7 @@
 
 @section('content')
 <x-page-header>
-    <a href="{{ route('admin.notices.create') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> New Notice</a>
+    <a href="{{ route('admin.notices.create') }}" class="btn btn-primary"><i class="hgi-stroke hgi-add-01"></i> New Notice</a>
 </x-page-header>
 
 <div class="card">
@@ -17,7 +17,7 @@
                         <span class="small text-muted">{{ $notice->published_on->format('d M Y') }} &middot; {{ $notice->branch?->name ?? 'All Branches' }}</span>
                     </div>
                     <div class="text-nowrap">
-                        <a href="{{ route('admin.notices.edit', $notice) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a>
+                        <a href="{{ route('admin.notices.edit', $notice) }}" class="btn btn-sm btn-outline-secondary"><i class="hgi-stroke hgi-edit-02"></i></a>
                         <x-delete-button :action="route('admin.notices.destroy', $notice)" />
                     </div>
                 </div>

@@ -10,7 +10,7 @@
         @endforeach
     </ul>
     @if (auth()->user()->isStaff())
-        <a href="{{ route('admin.leaves.create') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add Leave</a>
+        <a href="{{ route('admin.leaves.create') }}" class="btn btn-primary"><i class="hgi-stroke hgi-add-01"></i> Add Leave</a>
     @endif
 </div>
 

@@ -4,7 +4,7 @@
 
 @section('content')
 <x-page-header subtitle="A branch rule overrides the company default. Hourly rate = (Basic or Gross) / divisor. The Bangladesh Labour Act uses Basic / 208 x 2.">
-    <a href="{{ route('admin.overtime-rules.create') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add Rule</a>
+    <a href="{{ route('admin.overtime-rules.create') }}" class="btn btn-primary"><i class="hgi-stroke hgi-add-01"></i> Add Rule</a>
 </x-page-header>
 
 <div class="card">
@@ -25,7 +25,7 @@
                     <td>{{ $rule->requires_approval ? 'Required' : 'Automatic' }}</td>
                     <td><x-badge :status="$rule->is_enabled ? 'active' : 'paused'" /></td>
                     <td class="text-end text-nowrap">
-                        <a href="{{ route('admin.overtime-rules.edit', $rule) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a>
+                        <a href="{{ route('admin.overtime-rules.edit', $rule) }}" class="btn btn-sm btn-outline-secondary"><i class="hgi-stroke hgi-edit-02"></i></a>
                         <x-delete-button :action="route('admin.overtime-rules.destroy', $rule)" />
                     </td>
                 </tr>

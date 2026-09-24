@@ -13,9 +13,9 @@
 </form>
 
 <x-page-header :title="$start->format('d M').' - '.$end->format('d M Y')" subtitle="Roster shifts override the employee's regular shift for those days.">
-    <a href="?{{ http_build_query(request()->except('week') + ['week' => $start->copy()->subWeek()->toDateString()]) }}" class="btn btn-outline-secondary"><i class="bi bi-chevron-left"></i></a>
-    <a href="?{{ http_build_query(request()->except('week') + ['week' => $start->copy()->addWeek()->toDateString()]) }}" class="btn btn-outline-secondary"><i class="bi bi-chevron-right"></i></a>
-    <a href="{{ route('admin.roster.create') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Assign Shifts</a>
+    <a href="?{{ http_build_query(request()->except('week') + ['week' => $start->copy()->subWeek()->toDateString()]) }}" class="btn btn-outline-secondary"><i class="hgi-stroke hgi-arrow-left-01"></i></a>
+    <a href="?{{ http_build_query(request()->except('week') + ['week' => $start->copy()->addWeek()->toDateString()]) }}" class="btn btn-outline-secondary"><i class="hgi-stroke hgi-arrow-right-01"></i></a>
+    <a href="{{ route('admin.roster.create') }}" class="btn btn-primary"><i class="hgi-stroke hgi-add-01"></i> Assign Shifts</a>
 </x-page-header>
 
 <div class="card mb-3">

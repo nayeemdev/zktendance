@@ -7,7 +7,7 @@
     <div class="list-group list-group-flush">
         @forelse ($documents as $document)
             <a href="{{ route('portal.documents.download', $document) }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                <span><i class="bi bi-file-earmark me-2"></i>{{ $document->title }} <span class="small text-muted">{{ $document->original_name }}</span></span>
+                <span><i class="hgi-stroke hgi-file-01 me-2"></i>{{ $document->title }} <span class="small text-muted">{{ $document->original_name }}</span></span>
                 @if ($document->expires_on)
                     <span class="badge text-bg-{{ $document->isExpired() ? 'danger' : ($document->expiresSoon() ? 'warning' : 'light') }}">Expires {{ $document->expires_on->format('d M Y') }}</span>
                 @endif
