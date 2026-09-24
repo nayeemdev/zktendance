@@ -103,10 +103,21 @@ class DemoSeeder extends Seeder
         $logs->store(Device::first(), $records);
 
         $casual = LeaveType::where('code', 'CL')->first();
-        $leave = $leaves->apply($employees[1], ['leave_type_id' => $casual->id, 'start_date' => today()->addDays(3)->toDateString(), 'end_date' => today()->addDays(4)->toDateString(), 'reason' => 'Family program']);
+        $start = $this->workingDay($employees[1], today()->addDays(3));
+        $leave = $leaves->apply($employees[1], ['leave_type_id' => $casual->id, 'start_date' => $start->toDateString(), 'end_date' => $this->workingDay($employees[1], $start->copy()->addDay())->toDateString(), 'reason' => 'Family program']);
         $leaves->approve($leave, $admin);
-        $leaves->apply($employees[2], ['leave_type_id' => $casual->id, 'start_date' => today()->addDays(7)->toDateString(), 'end_date' => today()->addDays(7)->toDateString(), 'reason' => 'Personal work']);
+        $day = $this->workingDay($employees[2], today()->addDays(7))->toDateString();
+        $leaves->apply($employees[2], ['leave_type_id' => $casual->id, 'start_date' => $day, 'end_date' => $day, 'reason' => 'Personal work']);
 
         Loan::create(['employee_id' => $employees[3]->id, 'amount' => 30000, 'installment' => 5000, 'start_month' => Carbon::now()->startOfMonth(), 'reason' => 'Salary advance']);
+    }
+
+    private function workingDay(Employee $employee, Carbon $date): Carbon
+    {
+        while ($employee->branch->isWeekend($date) || Holiday::whereDate('date', $date)->exists()) {
+            $date = $date->copy()->addDay();
+        }
+
+        return $date;
     }
 }
