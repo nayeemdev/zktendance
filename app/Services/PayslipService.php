@@ -8,6 +8,7 @@ use App\Models\Payslip;
 use App\Models\PayslipItem;
 use App\Models\SalaryComponent;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 
@@ -66,6 +67,7 @@ class PayslipService
     public function pdf(Payslip $payslip): \Barryvdh\DomPDF\PDF
     {
         $payslip->loadMissing(['items', 'payrollRun', 'employee.department', 'employee.designation', 'employee.branch']);
+        File::ensureDirectoryExists(storage_path('app/tmp'));
 
         return Pdf::loadView('payslips.pdf', ['payslip' => $payslip])->setPaper('a4');
     }

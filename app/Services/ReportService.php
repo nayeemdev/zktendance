@@ -6,8 +6,10 @@ use App\Models\Attendance;
 use App\Models\Employee;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\File;
 use OpenSpout\Common\Entity\Row;
 use OpenSpout\Common\Entity\Style\Style;
+use OpenSpout\Writer\XLSX\Options;
 use OpenSpout\Writer\XLSX\Writer;
 
 class ReportService
@@ -79,15 +81,23 @@ class ReportService
 
     public function xlsx(string $fileName, array $header, iterable $rows)
     {
-        $path = tempnam(sys_get_temp_dir(), 'xlsx');
-        $writer = new Writer;
-        $writer->openToFile($path);
-        $writer->addRow(Row::fromValuesWithStyle($header, (new Style)->withFontBold(true)));
+        $folder = storage_path('app/tmp');
+        File::ensureDirectoryExists($folder);
+        $path = tempnam($folder, 'xlsx');
 
-        foreach ($rows as $row) {
-            $writer->addRow(Row::fromValues(array_map(fn ($value) => $value ?? '', array_values($row))));
+        try {
+            $writer = new Writer(new Options(tempFolder: $folder));
+            $writer->openToFile($path);
+            $writer->addRow(Row::fromValuesWithStyle($header, (new Style)->withFontBold(true)));
+
+            foreach ($rows as $row) {
+                $writer->addRow(Row::fromValues(array_map(fn ($value) => $value ?? '', array_values($row))));
+            }
+            $writer->close();
+        } catch (\Throwable $e) {
+            File::delete($path);
+            throw $e;
         }
-        $writer->close();
 
         return response()->download($path, $fileName, [
             'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',

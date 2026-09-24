@@ -23,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrapFive();
+        config(['dompdf.options.temp_dir' => storage_path('app/tmp')]);
 
         Event::listen(Login::class, fn (Login $event) => AuditLog::create([
             'user_id' => $event->user->getAuthIdentifier(),
