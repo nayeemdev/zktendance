@@ -260,6 +260,10 @@ class PayrollService
                 default => $summary['off']++,
             };
 
+            if (in_array($row->overtime_status, ['pending', 'rejected'])) {
+                continue;
+            }
+
             if (in_array($row->status, [Attendance::HOLIDAY, Attendance::WEEKEND])) {
                 $summary['ot_offday_minutes'] += $row->overtime_minutes;
             } else {

@@ -10,7 +10,7 @@
 <div class="card">
     <div class="table-responsive">
         <table class="table table-hover mb-0">
-            <thead><tr><th>Name</th><th>Applies To</th><th>Starts After</th><th>Rounding</th><th>Daily Max</th><th>Rate</th><th>Workday</th><th>Off Day</th><th>Status</th><th></th></tr></thead>
+            <thead><tr><th>Name</th><th>Applies To</th><th>Starts After</th><th>Rounding</th><th>Daily Max</th><th>Rate</th><th>Workday</th><th>Off Day</th><th>Approval</th><th>Status</th><th></th></tr></thead>
             <tbody>
             @foreach ($rules as $rule)
                 <tr>
@@ -22,6 +22,7 @@
                     <td>{{ ucfirst($rule->rate_base) }} / {{ $rule->monthly_hours_divisor }}</td>
                     <td>x{{ $rule->workday_multiplier }}</td>
                     <td>x{{ $rule->offday_multiplier }}</td>
+                    <td>{{ $rule->requires_approval ? 'Required' : 'Automatic' }}</td>
                     <td><x-badge :status="$rule->is_enabled ? 'active' : 'paused'" /></td>
                     <td class="text-end text-nowrap">
                         <a href="{{ route('admin.overtime-rules.edit', $rule) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a>

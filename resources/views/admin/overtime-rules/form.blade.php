@@ -20,6 +20,7 @@
                 <x-input name="offday_multiplier" type="number" step="0.01" label="Weekend / Holiday Multiplier" :value="$rule->offday_multiplier" class="col-md-6 mb-3" required />
             </div>
             <x-checkbox name="is_enabled" label="Enabled" :checked="$rule->is_enabled" />
+            <x-checkbox name="requires_approval" label="Overtime needs approval before it is paid" :checked="$rule->requires_approval" help="HR or the branch manager approves each day's overtime in Overtime Approvals." />
             <button class="btn btn-primary">Save</button>
             <a href="{{ route('admin.overtime-rules.index') }}" class="btn btn-light">Cancel</a>
         </form>

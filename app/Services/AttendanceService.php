@@ -53,7 +53,7 @@ class AttendanceService
             ->get()
             ->keyBy('employee_id');
 
-        $manual = Attendance::whereDate('date', $date)->where('is_manual', true)->pluck('employee_id')->flip();
+        $existing = Attendance::whereDate('date', $date)->whereIn('employee_id', $employees->pluck('id'))->get()->keyBy('employee_id');
 
         $holidays = Holiday::whereDate('date', $date)->get();
 
@@ -72,7 +72,7 @@ class AttendanceService
 
         $count = 0;
         foreach ($employees as $employee) {
-            if (isset($manual[$employee->id])) {
+            if ($existing->get($employee->id)?->is_manual) {
                 continue;
             }
 
@@ -94,6 +94,12 @@ class AttendanceService
                 'weekend' => $employee->branch?->isWeekend($date) ?? false,
                 'leave' => $leaves[$employee->id] ?? null,
             ]);
+
+            $previous = $existing->get($employee->id);
+            $values['overtime_status'] = $this->overtimeStatus($employee, $values['overtime_minutes'], $previous);
+            if ($values['overtime_status'] === 'pending') {
+                $values['overtime_reviewed_by'] = null;
+            }
 
             Attendance::updateOrCreate(
                 ['employee_id' => $employee->id, 'date' => $date->toDateString()],
@@ -131,6 +137,10 @@ class AttendanceService
         if ($status) {
             $values['status'] = $status;
         }
+
+        $needsApproval = ($values['overtime_minutes'] ?? 0) > 0 && $this->overtimeRule($employee->branch_id)?->requires_approval;
+        $values['overtime_status'] = $needsApproval ? 'approved' : null;
+        $values['overtime_reviewed_by'] = $needsApproval ? auth()->id() : null;
 
         return Attendance::updateOrCreate(
             ['employee_id' => $employee->id, 'date' => $date->toDateString()],
@@ -217,6 +227,17 @@ class AttendanceService
         }
 
         return $values;
+    }
+
+    private function overtimeStatus(Employee $employee, int $minutes, ?Attendance $previous): ?string
+    {
+        if ($minutes <= 0 || ! $this->overtimeRule($employee->branch_id)?->requires_approval) {
+            return null;
+        }
+
+        $decided = $previous && in_array($previous->overtime_status, ['approved', 'rejected']) && $previous->overtime_minutes === $minutes;
+
+        return $decided ? $previous->overtime_status : 'pending';
     }
 
     private function defaultShift(): ?Shift

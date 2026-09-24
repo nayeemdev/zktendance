@@ -66,6 +66,11 @@ class Attendance extends Model
         return $this->belongsTo(Employee::class);
     }
 
+    public function overtimeReviewer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'overtime_reviewed_by');
+    }
+
     public function shift(): BelongsTo
     {
         return $this->belongsTo(Shift::class);
