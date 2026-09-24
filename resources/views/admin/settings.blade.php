@@ -45,6 +45,14 @@
             </div>
 
             <div class="card mb-3">
+                <div class="card-header bg-white fw-semibold">Notifications</div>
+                <div class="card-body row">
+                    <x-checkbox name="email_notifications" label="Also send notifications by email" :checked="$settings['email_notifications']" class="col-12 mb-3" help="Leave, correction and payslip updates are always shown in the app." />
+                    <x-input name="device_offline_minutes" type="number" label="Alert when a device is silent for (minutes)" :value="$settings['device_offline_minutes']" class="col-md-6 mb-3" required />
+                </div>
+            </div>
+
+            <div class="card mb-3">
                 <div class="card-header bg-white fw-semibold">Income Tax (TDS)</div>
                 <div class="card-body">
                     <x-checkbox name="tax_enabled" label="Deduct monthly income tax" :checked="$settings['tax_enabled']" />

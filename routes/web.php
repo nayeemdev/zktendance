@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Portal;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SetupController;
@@ -20,6 +21,9 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [LoginController::class, 'destroy'])->name('logout');
     Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('profile/password', [ProfileController::class, 'update'])->name('profile.password');
+    Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('notifications/{id}', [NotificationController::class, 'open'])->name('notifications.open');
+    Route::post('notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.read-all');
 
     Route::prefix('admin')->name('admin.')->middleware('role:admin,hr')->group(function () {
         Route::get('/', Admin\DashboardController::class)->name('dashboard');

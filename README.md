@@ -20,6 +20,7 @@ Office attendance, leave and payroll management for companies using ZKTeco biome
 - **Payslips** as PDF, emailed to employees on approval, CSV export for the bank.
 - **Reports**: daily attendance, monthly summary, monthly attendance sheet, late and early leave, leave balance, all with CSV export.
 - **Employee portal**: today's punches, monthly attendance, leave apply and cancel, correction requests, payslip download, notices.
+- **Notifications** in the app (bell icon) and by email: new leave and correction requests for HR, approval results for employees, payslip ready, and device offline alerts for admins.
 - **Roles**: Admin (everything), HR (everything except settings, branches, devices and users), Employee (portal only).
 
 ## Requirements
@@ -87,9 +88,10 @@ It runs:
 |---|---|---|
 | `zk:sync` | every 5 minutes | Download punches from pull mode devices |
 | `attendance:process` | every 15 minutes | Build attendance for yesterday and today |
+| `devices:check` | every 10 minutes | Alert admins when a device stops responding |
 | `leave:allocate` | 1 January | Create the new year's leave balances with carry forward |
 
-Run a queue worker so payslip emails are sent:
+Run a queue worker so payslip and notification emails are sent:
 
 ```bash
 php artisan queue:work

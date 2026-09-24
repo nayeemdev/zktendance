@@ -30,6 +30,8 @@ class SettingRequest extends FormRequest
             'minimum_tax' => ['required', 'numeric', 'min:0'],
             'payslip_footer' => ['nullable', 'string', 'max:255'],
             'email_payslips' => ['boolean'],
+            'email_notifications' => ['boolean'],
+            'device_offline_minutes' => ['required', 'integer', 'min:5', 'max:1440'],
             'slabs' => ['nullable', 'array'],
             'slabs.*.amount' => ['nullable', 'numeric', 'min:0'],
             'slabs.*.rate' => ['nullable', 'numeric', 'min:0', 'max:100'],
@@ -41,6 +43,7 @@ class SettingRequest extends FormRequest
         $this->merge([
             'tax_enabled' => $this->boolean('tax_enabled'),
             'email_payslips' => $this->boolean('email_payslips'),
+            'email_notifications' => $this->boolean('email_notifications'),
         ]);
     }
 }

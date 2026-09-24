@@ -38,6 +38,7 @@ class Device extends Model
             'is_active' => 'boolean',
             'last_synced_at' => 'datetime',
             'last_seen_at' => 'datetime',
+            'offline_notified_at' => 'datetime',
         ];
     }
 
