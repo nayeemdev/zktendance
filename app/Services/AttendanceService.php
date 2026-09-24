@@ -9,6 +9,7 @@ use App\Models\Holiday;
 use App\Models\LeaveRequest;
 use App\Models\OvertimeRule;
 use App\Models\Shift;
+use App\Models\ShiftAssignment;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -45,6 +46,13 @@ class AttendanceService
             return 0;
         }
 
+        $rostered = ShiftAssignment::with('shift')
+            ->whereIn('employee_id', $employees->pluck('id'))
+            ->covering($date)
+            ->orderBy('id')
+            ->get()
+            ->keyBy('employee_id');
+
         $manual = Attendance::whereDate('date', $date)->where('is_manual', true)->pluck('employee_id')->flip();
 
         $holidays = Holiday::whereDate('date', $date)->get();
@@ -68,7 +76,7 @@ class AttendanceService
                 continue;
             }
 
-            $shift = $employee->shift ?? $this->defaultShift();
+            $shift = $rostered->get($employee->id)?->shift ?? $employee->shift ?? $this->defaultShift();
             if (! $shift) {
                 continue;
             }
@@ -99,7 +107,7 @@ class AttendanceService
 
     public function saveManual(Employee $employee, Carbon $date, ?string $checkIn, ?string $checkOut, ?string $status, ?string $note): Attendance
     {
-        $shift = $employee->shift ?? $this->defaultShift();
+        $shift = $employee->shiftOn($date) ?? $this->defaultShift();
         $punches = collect();
 
         foreach ([$checkIn, $checkOut] as $time) {

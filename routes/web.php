@@ -34,6 +34,10 @@ Route::middleware('auth')->group(function () {
         Route::resource('departments', Admin\DepartmentController::class)->except('show');
         Route::resource('designations', Admin\DesignationController::class)->except('show');
         Route::resource('shifts', Admin\ShiftController::class)->except('show');
+        Route::get('roster', [Admin\RosterController::class, 'index'])->name('roster.index');
+        Route::get('roster/create', [Admin\RosterController::class, 'create'])->name('roster.create');
+        Route::post('roster', [Admin\RosterController::class, 'store'])->name('roster.store');
+        Route::delete('roster/{assignment}', [Admin\RosterController::class, 'destroy'])->name('roster.destroy');
         Route::resource('holidays', Admin\HolidayController::class)->except('show');
 
         Route::get('attendance', [Admin\AttendanceController::class, 'index'])->name('attendance.index');
