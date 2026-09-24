@@ -21,6 +21,7 @@ Office attendance, leave and payroll management for companies using ZKTeco biome
 - **Reports**: daily attendance, monthly summary, monthly attendance sheet, late and early leave, leave balance, all with CSV export.
 - **Employee portal**: today's punches, monthly attendance, leave apply and cancel, correction requests, payslip download, notices.
 - **Notifications** in the app (bell icon) and by email: new leave and correction requests for HR, approval results for employees, payslip ready, and device offline alerts for admins.
+- **Audit log** (admin only): who created, changed or deleted employees, salaries, manual attendance, leave, loans, payroll, settings, devices and users, with old and new values. Logins are recorded too.
 - **Roles**: Admin (everything), HR (everything except settings, branches, devices and users), Employee (portal only).
 
 ## Requirements

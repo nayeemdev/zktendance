@@ -37,6 +37,7 @@
             ['admin.branches.index', 'building', 'Branches', 'admin.branches.*'],
             ['admin.devices.index', 'hdd-network', 'ZKTeco Devices', 'admin.devices.*'],
             ['admin.users.index', 'person-gear', 'Admin Users', 'admin.users.*'],
+            ['admin.audit-logs.index', 'journal-text', 'Audit Log', 'admin.audit-logs.*'],
             ['admin.settings.edit', 'gear', 'Settings', 'admin.settings.*'],
         ];
     }

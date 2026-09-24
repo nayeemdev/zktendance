@@ -3,12 +3,15 @@
 namespace App\Models;
 
 use App\Casts\DateOnly;
+use App\Models\Concerns\Auditable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PayrollRun extends Model
 {
+    use Auditable;
+
     public const DRAFT = 'draft';
 
     public const APPROVED = 'approved';
@@ -56,5 +59,10 @@ class PayrollRun extends Model
     public function title(): string
     {
         return $this->month->format('F Y').' - '.($this->branch?->name ?? 'All Branches');
+    }
+
+    public function auditLabel(): string
+    {
+        return 'Payroll '.$this->title();
     }
 }

@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Auditable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class OvertimeRule extends Model
 {
+    use Auditable;
+
     protected $guarded = ['id'];
 
     protected function casts(): array
