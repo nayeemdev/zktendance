@@ -87,6 +87,7 @@ Route::middleware('auth')->group(function () {
             Route::get('settings', [Admin\SettingController::class, 'edit'])->name('settings.edit');
             Route::put('settings', [Admin\SettingController::class, 'update'])->name('settings.update');
             Route::resource('users', Admin\UserController::class)->except('show');
+            Route::get('audit-logs', [Admin\AuditLogController::class, 'index'])->name('audit-logs.index');
             Route::resource('branches', Admin\BranchController::class)->except('show');
             Route::resource('devices', Admin\DeviceController::class);
             Route::controller(Admin\DeviceController::class)->prefix('devices/{device}')->name('devices.')->group(function () {

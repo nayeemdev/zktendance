@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Auditable;
 use Illuminate\Database\Eloquent\Model;
 
 class SalaryComponent extends Model
 {
+    use Auditable;
+
     public const EARNING = 'earning';
 
     public const DEDUCTION = 'deduction';

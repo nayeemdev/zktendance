@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use App\Casts\DateOnly;
+use App\Models\Concerns\Auditable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class LeaveRequest extends Model
 {
+    use Auditable;
+
     public const STATUS_COLORS = ['pending' => 'warning', 'approved' => 'success', 'rejected' => 'danger', 'cancelled' => 'secondary'];
 
     protected $guarded = ['id'];
@@ -38,5 +41,10 @@ class LeaveRequest extends Model
     public function reviewer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'reviewed_by');
+    }
+
+    public function auditLabel(): string
+    {
+        return 'Leave of '.($this->employee?->name ?? '#'.$this->employee_id);
     }
 }

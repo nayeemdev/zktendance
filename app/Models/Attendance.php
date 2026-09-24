@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use App\Casts\DateOnly;
+use App\Models\Concerns\Auditable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Attendance extends Model
 {
+    use Auditable;
+
     public const PRESENT = 'present';
 
     public const LATE = 'late';
@@ -76,5 +79,15 @@ class Attendance extends Model
     public function statusColor(): string
     {
         return self::COLORS[$this->status] ?? 'secondary';
+    }
+
+    public function shouldAudit(): bool
+    {
+        return $this->is_manual || $this->getOriginal('is_manual');
+    }
+
+    public function auditLabel(): string
+    {
+        return ($this->employee?->name ?? 'Employee').' on '.$this->date?->toDateString();
     }
 }
